@@ -1,0 +1,19 @@
+@// Rythm template for the User Manager 
+@// see http://rythmengine.org/ for the syntax of this templte
+@import com.bitplan.rest.UserManager
+@import com.bitplan.rest.User
+@args() {
+  String title, String tooltip, String comment,UserManager userManager;
+}@//args
+@include("base.rythm")
+@header(title,tooltip,comment)
+ @{
+   int count=0;
+ }
+<table>
+      <th>Name</th><th>Vorname</th><th>E-Mail</th><th>Rolle</th>
+@for (User user:userManager.getUsers()) {
+      <tr><td>@(user.getName())</td><td>@(user.getFirstname())</td><td>@(user.getEmail())</td><td>@(user.getRole())</td></tr>
+}      
+    </table>
+@footer()
