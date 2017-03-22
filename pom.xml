@@ -1,0 +1,94 @@
+<!-- Copyright (c) 2017 Wolfgang Fahl / BITPlan GmbH Project details and 
+	license at: https://github.com/WolfgangFahl/com.bitplan.vzjava -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.bitplan.vzjava</groupId>
+	<artifactId>com.bitplan.vzjava</artifactId>
+	<version>0.0.1</version>
+	<name>vzjava</name>
+	<description>Java Frontend für Volkszähler</description>
+	<url>https://github.com/WolfgangFahl/com.bitplan.vzjava</url>
+	<licenses>
+		<license>
+			<name>Apache 2.0 license</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</licenses>
+	<scm>
+		<connection>scm:git:git://github.com/WolfgangFahl/com.bitplan.vzjava.git</connection>
+		<developerConnection>scm:git:git@github.com:WolfgangFahl/com.bitplan.vzjava.git</developerConnection>
+		<url>https://github.com/WolfgangFahl/com.bitplan.vzjava</url>
+	</scm>
+	<issueManagement>
+		<url>https://github.com/WolfgangFahl/com.bitplan.vzjava/issues</url>
+		<system>GitHub</system>
+	</issueManagement>
+	<developers>
+		<developer>
+			<id>wf</id>
+			<name>Wolfgang Fahl</name>
+			<organization>BITPlan GmbH</organization>
+			<organizationUrl>http://www.bitplan.com</organizationUrl>
+		</developer>
+	</developers>
+	<dependencies>
+		<!-- simplerest -api -->
+		<dependency>
+			<groupId>com.bitplan.rest</groupId>
+			<artifactId>com.bitplan.simplerest</artifactId>
+			<version>0.0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bitplan.rest</groupId>
+			<artifactId>com.bitplan.simplerest</artifactId>
+			<version>0.0.7</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>6.0.5</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.jfree/jfreechart -->
+		<dependency>
+			<groupId>org.jfree</groupId>
+			<artifactId>jfreechart</artifactId>
+			<version>1.0.19</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3
+			for linear regressions -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.6.1</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source />
+					<target />
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- http://code.mycila.com/license-maven-plugin/ -->
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<version>1.9.0</version>
+				<configuration>
+					<header>src/etc/header.txt</header>
+					<includes>
+						<include>src/**/*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

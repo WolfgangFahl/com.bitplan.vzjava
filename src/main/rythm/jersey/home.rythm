@@ -1,0 +1,4 @@
+@include("base.rythm")
+@args() { String title, String comment, String tooltip; }@//args
+@header(title,tooltip,comment)
+@footer()

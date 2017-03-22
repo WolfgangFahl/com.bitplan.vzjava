@@ -1,0 +1,173 @@
+@import java.text.SimpleDateFormat
+@// header with title and tooltip
+@def header(String title, String tooltip, String comment) {
+@{
+  // color scheme
+  /* material design Indigo
+    https://www.materialpalette.com/indigo/indigo
+    http://stackoverflow.com/questions/4069734/cross-browser-fixed-header-footer-and-scrollable-content
+ */
+  String dark_primary_color="#303F9F";
+  String primary_color="#3F51B5";
+  String light_primary_color="#C5CAE9";
+  String primary_text="#212121";
+  String secondary_text="#727272";
+  String text_icons="#FFFFFF";
+  String divider_color="#B6B6B6";
+  String accent_color="#FF4081";
+}
+<!DOCTYPE html>
+<!-- @(comment) -->
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>@title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Include required JS files -->
+    <!--  https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css -->
+    <link rel="stylesheet" href="/css/themes/base/jquery-ui.css">
+    
+    <!-- https://code.jquery.com/jquery-1.12.4.js -->
+    <script src="/js/jquery-1.12.4.js"></script>
+    <!-- https://code.jquery.com/ui/1.12.1/jquery-ui.js -->
+    <script src="/js/ui/jquery-ui.js"></script>
+    <!-- http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.1/i18n/jquery-ui-i18n.min.js  -->
+    <script src="/js/i18n/jquery-ui-i18n.min.js"></script>
+    <!--  http://jonthornton.github.io/jquery-timepicker/ 
+    <script src="/js/jquery.timepicker.min.js"></script>
+    <link rel="stylesheet" href="/css/jquery.timepicker.css">-->
+    <!-- https://github.com/trentrichardson/jQuery-Timepicker-Addon -->
+    <link rel="stylesheet" href="/js/timepicker/jquery-ui-timepicker-addon.min.css">
+ 	<script src="/js/timepicker/jquery-ui-timepicker-addon.min.js"></script>
+    <script src="/js/timepicker/i18n/jquery-ui-timepicker-de.js"></script>
+    <!--  Material design icons see https://materialdesignicons.com/getting-started -->
+	<link href="/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+    
+    <style type="text/css">
+body {
+	background-attachment: scroll;
+	background-clip: border-box;
+	background-image: none;
+	background-origin: padding-box;
+	background-position: 0% 0%;
+	background-repeat: repeat;
+	background-size: auto auto;
+	color: @(primary_text);
+	font-family: Arial,sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	margin-top: 10px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 0px;
+}
+table {
+	border-collapse: collapse;
+	color: @(text_icons);
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+	margin-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 0px;
+	overflow-x: auto;
+}
+tbody {
+	border-collapse: collapse;
+	color: @(text_icons);
+	font-family: Arial,sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+}
+th {
+	background-color: @(primary_color); /* PRIMARY COLOR */
+	border-color: @(dark_primary_color);
+	border-style: solid;
+	border-width: 1px;
+	border-collapse: collapse;
+	color: @(text_icons);
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 20px;
+	padding-bottom: 7px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 7px;
+}
+td {
+	border-color: @(dark_primary_color);
+	border-style: solid;
+	border-width: 1px;
+	border-collapse: collapse;
+	color: black;
+	font-family: Arial,sans-serif;
+	font-size: 14px;
+	line-height: 20px;
+	padding-bottom: 7px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 7px;
+}
+/* material design Indigo
+    https://www.materialpalette.com/indigo/indigo
+    http://stackoverflow.com/questions/4069734/cross-browser-fixed-header-footer-and-scrollable-content
+ */
+#headerbox {
+  background:@(dark_primary_color); /* DARK PRIMARY COLOR */
+  color:@(text_icons);
+  padding: 2px;
+  position:absolute; top:0px; left:0px; height:32px; right:0px;overflow:hidden;
+}
+#navigationbox {
+  background:@(primary_color); /* PRIMARY COLOR */
+  padding:4px;
+  color:@(text_icons);
+  font-size:18px;
+  position:absolute; top:32px; left:0px; height:32px; right:0px;overflow:hidden;
+}
+#footerbox {
+  background:@(dark_primary_color); /* DARK PRIMARY COLOR */
+  position:absolute; bottom:0px; height:24px; left:0px; right:0px; overflow:hidden;
+}
+#contentbox {
+  position:absolute; top:64px; bottom:24px; left:0px; right:0px;
+  background:white;
+  overflow-y: scroll;
+}
+.headerboxicon {
+  color:@(text_icons);
+  font-size:24px;
+}
+</style>
+   <script>
+	  $(function() {
+		  // http://stackoverflow.com/questions/494958/how-do-i-localize-the-jquery-ui-datepicker
+		  // http://stackoverflow.com/questions/13993619/how-to-set-locale-format-from-datepicker
+	      $(".datepicker").datepicker('option','dateFormat','yy-mm-dd');
+	      $.datepicker.setDefaults($.datepicker.regional['de']);
+	      $(".timepicker").timepicker({ 'timeFormat': 'HH:mm', 'showDuration': true });
+	      $(".timepicker").timepicker($.timepicker.regional['de']);
+	      $(".datetimepicker").datetimepicker({ 'timeFormat': 'HH:mm', 'dateFormat': 'yy-mm-dd' });
+	  });
+    </script>
+  </head>
+  <body>
+     <div id='headerbox'>
+     <a href='/vz/home' title='Home'><i class='mdi mdi-home headerboxicon'></i><!-- home --></a>
+     <a href='/vz/users' title='Benutzer'><i class='mdi mdi-account-multiple headerboxicon'></i><!-- users --></a>
+     </div>
+     <div id='navigationbox' title='@(tooltip)'>@(title)</div>
+     <div id='contentbox'>
+}
+@def footer() {
+     </div> <!--  end of maincontentbox -->
+   <div id='footerbox'></div>
+  </body>
+</html>
+}
