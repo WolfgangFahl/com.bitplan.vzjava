@@ -29,5 +29,12 @@
 				<outputPath>com/bitplan/vzjava/jpa/jaxb.properties</outputPath>
 			</configuration>
 		</containerDescriptorHandler>
+		<containerDescriptorHandler>
+			<handlerName>file-aggregator</handlerName>
+			<configuration>
+				<filePattern>com/bitplan/rest/users/jaxb.properties</filePattern>
+				<outputPath>com/bitplan/rest/users/jaxb.properties</outputPath>
+			</configuration>
+		</containerDescriptorHandler>
 	</containerDescriptorHandlers>
 </assembly>

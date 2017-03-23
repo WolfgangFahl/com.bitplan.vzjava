@@ -20,38 +20,52 @@
  */
 package com.bitplan.vzjava.jpa;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 
 /**
  * JPA access to Volkszähler database
+ * 
  * @author wf
  *
  */
 public class VZDB {
-  private javax.persistence.EntityManagerFactory emf;
-  private javax.persistence.EntityManager em;
-  private String PERSISTENCE_UNIT_NAME = "vz";
-  
-  /**
-   * init
-   */
-  public EntityManager getEntityManager() {
-    if (em == null) {
-      emf = javax.persistence.Persistence
-          .createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-      em = emf.createEntityManager();
-    }
-    return em;
-  }
+	private javax.persistence.EntityManagerFactory emf;
+	private javax.persistence.EntityManager em;
+	private String PERSISTENCE_UNIT_NAME = "vz";
+	private Map<String, String> properties = new HashMap<String, String>();
 
-  /**
-   * close
-   */
-  public void close() {
-    em.close();
-    em = null;
-    emf.close();
-    emf = null;
-  }
+	/**
+	 * init
+	 */
+	public EntityManager getEntityManager() {
+		if (em == null) {
+			emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
+			em = emf.createEntityManager();
+		}
+		return em;
+	}
+	
+	/**
+	 * set a property with the given key and value
+	 * @param key
+	 * @param value
+	 */
+	public void setProperty(String key,String value) {
+		properties.put(key, value);
+	}
+
+	/**
+	 * close
+	 */
+	public void close() {
+		em.close();
+		em = null;
+		emf.close();
+		emf = null;
+	}
 
 }

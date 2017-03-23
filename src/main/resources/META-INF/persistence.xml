@@ -6,6 +6,7 @@
     <persistence-unit name="vz" transaction-type="RESOURCE_LOCAL">
       <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
       <class>com.bitplan.vzjava.jpa.PropertiesDao</class>
+      <class>com.bitplan.vzjava.jpa.PowerValueDao</class>
       <properties>
         <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
         <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:src/test/data/vzdb/vztest.db" />
