@@ -11,6 +11,16 @@ https://github.com/WolfgangFahl/com.bitplan.vzjava/issues
 * [Apache Lizenz](https://www.apache.org/licenses/LICENSE-2.0)
 * Maven basiertes Java project mit JUnit 4 Tests.
 
+# Installation
+```
+git clone https://github.com/WolfgangFahl/com.bitplan.vzjava
+cd com.bitplan.vzjava
+mvn package assembly:single
+java -jar target/com.bitplan.vzjava-0.0.1-jar-with-dependencies-and-services.jar 
+```
+# Usage
+http://localhost:8380
+
 # Tests
 Es gibt 2 JUnit tests für version 0.0.1
 

@@ -1,0 +1,30 @@
+<!-- see http://maven.apache.org/guides/mini/guide-assemblies.html see http://maven.apache.org/plugins/maven-assembly-plugin/descriptor-refs.html -->
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<!-- TODO: a jarjar format would be better -->
+	<id>jar-with-dependencies-and-services</id>
+	<formats>
+		<format>jar</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/</outputDirectory>
+			<useProjectArtifact>true</useProjectArtifact>
+			<unpack>true</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+	<!-- http://stackoverflow.com/questions/1607220/how-can-i-merge-resource-files-in-a-maven-assembly -->
+	<containerDescriptorHandlers>
+		<containerDescriptorHandler>
+			<handlerName>metaInf-services</handlerName>
+		</containerDescriptorHandler>
+		<!-- <containerDescriptorHandler> <handlerName>file-aggregator</handlerName> 
+			<configuration> <filePattern>com/bitplan/mediawiki/japi/api/jaxb.properties</filePattern> 
+			<outputPath>com/bitplan/mediawiki/japi/api/jaxb.properties</outputPath> </configuration> 
+			</containerDescriptorHandler> -->
+	</containerDescriptorHandlers>
+</assembly>
