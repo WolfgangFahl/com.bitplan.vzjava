@@ -22,13 +22,13 @@ java -jar target/com.bitplan.vzjava-0.0.1-jar-with-dependencies-and-services.jar
 http://localhost:8380
 
 # Tests
-Es gibt 2 JUnit tests für version 0.0.1
+Es gibt 3 JUnit tests für version 0.0.1
 
 ## Tests laufen lassen
 ```
 mvn test
 ...
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
 ```
 
 # Versionsgeschichte

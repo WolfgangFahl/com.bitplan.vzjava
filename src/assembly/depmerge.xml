@@ -22,9 +22,12 @@
 		<containerDescriptorHandler>
 			<handlerName>metaInf-services</handlerName>
 		</containerDescriptorHandler>
-		<!-- <containerDescriptorHandler> <handlerName>file-aggregator</handlerName> 
-			<configuration> <filePattern>com/bitplan/mediawiki/japi/api/jaxb.properties</filePattern> 
-			<outputPath>com/bitplan/mediawiki/japi/api/jaxb.properties</outputPath> </configuration> 
-			</containerDescriptorHandler> -->
+		<containerDescriptorHandler>
+			<handlerName>file-aggregator</handlerName>
+			<configuration>
+				<filePattern>com/bitplan/vzjava/jpa/jaxb.properties</filePattern>
+				<outputPath>com/bitplan/vzjava/jpa/jaxb.properties</outputPath>
+			</configuration>
+		</containerDescriptorHandler>
 	</containerDescriptorHandlers>
 </assembly>

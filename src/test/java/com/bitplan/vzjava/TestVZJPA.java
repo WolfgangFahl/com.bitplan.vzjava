@@ -20,37 +20,68 @@
  */
 package com.bitplan.vzjava;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import javax.persistence.Query;
+import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
 
-import com.bitplan.vzjava.jpa.PropertiesDao;
+import com.bitplan.vzjava.jpa.PropertiesManagerDao;
 import com.bitplan.vzjava.jpa.VZDB;
 
 /**
  * test JPA access to Volkszähler DB
+ * 
  * @author wf
  *
  */
 public class TestVZJPA {
-  boolean debug = true;
+	private static PropertiesManagerDao pm;
+	private static List<Properties> props;
+	boolean debug = false;
 
-  @Test
-  public void testGetProperties() {
-    VZDB vz = new VZDB();
-    Query query = vz.getEntityManager()
-        .createQuery("select p from Properties p");
-    @SuppressWarnings("unchecked")
-    List<PropertiesDao> props = query.getResultList();
-    assertNotNull(props);
-    for (PropertiesDao prop : props) {
-      if (debug)
-        System.out.println(String.format("%3d %3d %s=%s", prop.getId(),
-            prop.getEntity_id(), prop.getPkey(), prop.getValue()));
-    }
-  }
+	public static PropertiesManagerDao getPropertiesManager() {
+		if (pm == null)
+			pm = new PropertiesManagerDao();
+		return pm;
+	}
+
+	public static List<Properties> getProperties() {
+		if (props==null) {
+		PropertiesManagerDao lpm = getPropertiesManager();
+		props=lpm.getProperties(new VZDB());
+		}
+		return props;
+	}
+
+	@Test
+	public void testGetProperties() {
+		props=getProperties();
+		for (Properties prop : props) {
+			if (debug)
+				System.out.println(String.format("%3d %3d %s=%s", prop.getId(), prop.getEntity_id(), prop.getPkey(),
+						prop.getValue()));
+		}
+		assertEquals(56,props.size());
+	}
+
+	@Test
+	public void testXml() throws JAXBException {
+		props=getProperties();
+		String xml=getPropertiesManager().asXML();
+		if (debug) {
+			System.out.println(xml);
+		}
+		assertTrue(xml.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+				"<propertiesManager>\n" + 
+				"   <properties>\n" + 
+				"      <property>\n" + 
+				"         <entity_id>1</entity_id>\n" + 
+				"         <id>1</id>\n" + 
+				"         <pkey>title</pkey>\n" + 
+				"         <value>Haus 1.8.0 EVU Bezug</value>"));
+	}
 }
