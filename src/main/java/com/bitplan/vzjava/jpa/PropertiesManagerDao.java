@@ -84,6 +84,10 @@ public class PropertiesManagerDao extends ManagerImpl<PropertiesManager,Properti
 		return getProperties();
 	}
 
+	/**
+	 * add a property to the properties
+	 * @param prop
+	 */
 	public void add(Properties prop) {
 		properties.add(prop);
 	}

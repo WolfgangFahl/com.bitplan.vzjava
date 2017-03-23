@@ -29,6 +29,7 @@ import com.bitplan.jaxb.JaxbFactory;
 import com.bitplan.jaxb.JaxbFactoryApi;
 import com.bitplan.jaxb.JaxbPersistenceApi;
 import com.bitplan.vzjava.Properties;
+import com.bitplan.vzjava.PropertiesImpl;
 
 /**
  * Properties Table
@@ -38,103 +39,47 @@ import com.bitplan.vzjava.Properties;
  */
 @Entity(name = "Properties")
 @Table(name = "Properties")
-public class PropertiesDao implements JaxbPersistenceApi<Properties>, Properties {
+public class PropertiesDao extends PropertiesImpl implements JaxbPersistenceApi<Properties>, Properties {
 	private static JaxbFactory<Properties> factory;
-	int id;
-	int entity_id;
-	String pkey;
-	String value;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#getId()
-	 */
 	@Id
 	public int getId() {
-		return id;
+		return super.getId();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#setId(int)
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#getEntity_id()
-	 */
+	@Override
 	public int getEntity_id() {
-		return entity_id;
+		return super.getEntity_id();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#setEntity_id(int)
-	 */
-	public void setEntity_id(int entity_id) {
-		this.entity_id = entity_id;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#getPkey()
-	 */
+	@Override
 	public String getPkey() {
-		return pkey;
+		return super.getPkey();
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#setPkey(java.lang.String)
-	 */
-	public void setPkey(String pkey) {
-		this.pkey = pkey;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#getValue()
-	 */
+	
+	@Override
 	public String getValue() {
-		return value;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#setValue(java.lang.String)
-	 */
-	public void setValue(String value) {
-		this.value = value;
+		return super.getValue();
 	}
 
 	public static JaxbFactoryApi<Properties> getFactoryStatic() {
-		if (factory==null) {
-			factory=new JaxbFactory<Properties>(PropertiesDao.class);
+		if (factory == null) {
+			factory = new JaxbFactory<Properties>(PropertiesDao.class);
 		}
 		return factory;
 	}
+
 	public JaxbFactoryApi<Properties> getFactory() {
 		return getFactoryStatic();
 	}
 
 	public String asJson() throws JAXBException {
-		String json=getFactory().asJson(this);
+		String json = getFactory().asJson(this);
 		return json;
 	}
 
 	public String asXML() throws JAXBException {
-		String xml=getFactory().asXML(this);
+		String xml = getFactory().asXML(this);
 		return xml;
 	}
 
