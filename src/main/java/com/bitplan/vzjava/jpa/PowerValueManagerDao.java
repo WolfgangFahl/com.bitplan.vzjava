@@ -20,8 +20,11 @@
  */
 package com.bitplan.vzjava.jpa;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -43,131 +46,161 @@ import com.bitplan.vzjava.PowerValueManager;
  *
  */
 @XmlRootElement(name = "powerValuesManager")
-public class PowerValueManagerDao extends ManagerImpl<PowerValueManager, PowerValue> implements PowerValueManager {
-	private static final double POWER_LIMIT = 15000; // powervalues over this
-														// value are artefacts
-	private static JaxbFactory<PowerValueManager> factory;
-	List<PowerValue> powerValues = new ArrayList<PowerValue>();
+public class PowerValueManagerDao extends
+    ManagerImpl<PowerValueManager, PowerValue> implements PowerValueManager {
+  private static final double POWER_LIMIT = 15000; // powervalues over this
+  // value are artefacts
 
-	@XmlElementWrapper(name = "powerValues")
-	@XmlElement(name = "powerValue")
-	public List<PowerValue> getPowerValues() {
-		return powerValues;
-	}
+  static SimpleDateFormat isoDateFormatter = new SimpleDateFormat(
+      "yyyy-MM-dd HH:mm:ss");
 
-	public void setPowerValues(List<PowerValue> PowerValue) {
-		this.powerValues = PowerValue;
-	}
+  private static JaxbFactory<PowerValueManager> factory;
+  List<PowerValue> powerValues = new ArrayList<PowerValue>();
 
-	public List<PowerValue> getElements() {
-		return getPowerValues();
-	}
+  @XmlElementWrapper(name = "powerValues")
+  @XmlElement(name = "powerValue", type = PowerValueDao.class)
+  public List<PowerValue> getPowerValues() {
+    return powerValues;
+  }
 
-	public static JaxbFactoryApi<PowerValueManager> getFactoryStatic() {
-		if (factory == null) {
-			factory = new JaxbFactory<PowerValueManager>(PowerValueManagerDao.class);
-		}
-		return factory;
-	}
+  public void setPowerValues(List<PowerValue> PowerValue) {
+    this.powerValues = PowerValue;
+  }
 
-	public JaxbFactoryApi<PowerValueManager> getFactory() {
-		return getFactoryStatic();
-	}
+  public List<PowerValue> getElements() {
+    return getPowerValues();
+  }
 
-	/**
-	 * get the values
-	 * 
-	 * @param from
-	 * @param to
-	 * @param channel
-	 * @return
-	 */
-	public List<PowerValue> get(VZDB vz, Calendar from, Calendar to, int channel, PowerValue.ChannelMode channelMode) {
-		List<PowerValue> result = null;
-		switch (channelMode) {
-		case Power:
-			result = getPower(vz, from, to, channel);
-			break;
-		case Counter:
-			result = getPowerFromCounter(vz, from, to, channel);
-			break;
-		}
-		return result;
-	}
+  public static JaxbFactoryApi<PowerValueManager> getFactoryStatic() {
+    if (factory == null) {
+      factory = new JaxbFactory<PowerValueManager>(PowerValueManagerDao.class);
+    }
+    return factory;
+  }
 
-	/**
-	 * get the powerValue based on the difference of two charge values
-	 * 
-	 * @param chargeValue
-	 * @param prevValue
-	 * @return - the power value
-	 */
-	public static double getPower(PowerValue chargeValue, PowerValue prevValue) {
-		double z1 = chargeValue.getValue();
-		double z2 = prevValue.getValue();
-		long msecs = chargeValue.getTimeStamp().getTime() - prevValue.getTimeStamp().getTime();
-		double diff = z1 - z2;
-		double power = diff / (msecs / 1000.0) * 3600;
-		return power;
-	}
+  public JaxbFactoryApi<PowerValueManager> getFactory() {
+    return getFactoryStatic();
+  }
 
-	/**
-	 * get power Values for the given period from the given channel
-	 * 
-	 * @param from
-	 * @param to
-	 * @param channel
-	 * @return
-	 */
-	public List<PowerValue> getPower(VZDB vz, Calendar from, Calendar to, int channel) {
-		@SuppressWarnings("unchecked")
-		TypedQuery<PowerValueDao> query = (TypedQuery<PowerValueDao>) vz.getEntityManager()
-				.createNamedQuery("Data.period");
-		query.setParameter(1, channel);
-		query.setParameter(2, from.getTime().getTime());
-		query.setParameter(3, to.getTime().getTime());
-		List<PowerValueDao> dataRecs = query.getResultList();
-		List<PowerValue> chargeValues = new ArrayList<PowerValue>();
-		for (PowerValue chargeValue : dataRecs) {
-			chargeValues.add(chargeValue);
-		}
-		return chargeValues;
-	}
+  /**
+   * get values base on String time stamps
+   * @param vz
+   * @param isoFrom
+   * @param isoTo
+   * @param channel
+   * @param channelMode
+   * @return a list of PowerValues
+   * @throws Exception
+   */
+  public List<PowerValue> get(VZDB vz, String isoFrom, String isoTo, int channel,
+      PowerValue.ChannelMode channelMode) throws Exception {
+    Date fromDate = isoDateFormatter.parse(isoFrom);
+    Date toDate = isoDateFormatter.parse(isoTo);
+    Calendar from=Calendar.getInstance();
+    from.setTime(fromDate);
+    Calendar to=Calendar.getInstance();
+    to.setTime(toDate);
+    List<PowerValue> result = this.get(vz, from, to, channel, channelMode);
+    return result;
+  }
+  /**
+   * get the values
+   * 
+   * @param from
+   * @param to
+   * @param channel
+   * @return
+   */
+  public List<PowerValue> get(VZDB vz, Calendar from, Calendar to, int channel,
+      PowerValue.ChannelMode channelMode) {
+    List<PowerValue> result = null;
+    switch (channelMode) {
+    case Power:
+      result = getPower(vz, from, to, channel);
+      break;
+    case Counter:
+      result = getPowerFromCounter(vz, from, to, channel);
+      break;
+    }
+    return result;
+  }
 
-	/**
-	 * get PowerValues from the two calendar instances
-	 * 
-	 * @param from
-	 * @param to
-	 * @param channel
-	 * @return
-	 */
-	public List<PowerValue> getPowerFromCounter(VZDB vz, Calendar from, Calendar to, int channel) {
-		List<PowerValue> powerValues = getPower(vz, from, to, channel);
-		List<PowerValue> result = new ArrayList<PowerValue>();
-		PowerValue prevValue = null;
-		for (PowerValue chargeValue : powerValues) {
-			if (prevValue != null) {
-				double power = getPower(chargeValue, prevValue);
-				if (power < POWER_LIMIT) {
-					PowerValue cv = new PowerValueImpl();
-					cv.setTimeStamp(chargeValue.getTimeStamp());
-					cv.setValue(power);
-					result.add(cv);
-				}
-			}
-			prevValue = chargeValue;
-		}
-		return result;
-	}
+  /**
+   * get the powerValue based on the difference of two charge values
+   * 
+   * @param chargeValue
+   * @param prevValue
+   * @return - the power value
+   */
+  public static double getPower(PowerValue chargeValue, PowerValue prevValue) {
+    double z1 = chargeValue.getValue();
+    double z2 = prevValue.getValue();
+    long msecs = chargeValue.getTimeStamp().getTime()
+        - prevValue.getTimeStamp().getTime();
+    double diff = z1 - z2;
+    double power = diff / (msecs / 1000.0) * 3600;
+    return power;
+  }
 
-	/**
-	 * add a property to the PowerValue
-	 * 
-	 * @param prop
-	 */
-	public void add(PowerValue prop) {
-		powerValues.add(prop);
-	}
+  /**
+   * get power Values for the given period from the given channel
+   * 
+   * @param from
+   * @param to
+   * @param channel
+   * @return
+   */
+  public List<PowerValue> getPower(VZDB vz, Calendar from, Calendar to,
+      int channel) {
+    @SuppressWarnings("unchecked")
+    TypedQuery<PowerValueDao> query = (TypedQuery<PowerValueDao>) vz
+        .getEntityManager().createNamedQuery("Data.period");
+    query.setParameter(1, channel);
+    query.setParameter(2, from.getTime().getTime());
+    query.setParameter(3, to.getTime().getTime());
+    List<PowerValueDao> dataRecs = query.getResultList();
+    List<PowerValue> chargeValues = new ArrayList<PowerValue>();
+    for (PowerValue chargeValue : dataRecs) {
+      chargeValues.add(chargeValue);
+    }
+    return chargeValues;
+  }
+
+  /**
+   * get PowerValues from the two calendar instances
+   * 
+   * @param from
+   * @param to
+   * @param channel
+   * @return
+   */
+  public List<PowerValue> getPowerFromCounter(VZDB vz, Calendar from,
+      Calendar to, int channel) {
+    List<PowerValue> powerValues = getPower(vz, from, to, channel);
+    List<PowerValue> result = new ArrayList<PowerValue>();
+    PowerValue prevValue = null;
+    for (PowerValue chargeValue : powerValues) {
+      if (prevValue != null) {
+        double power = getPower(chargeValue, prevValue);
+        if (power < POWER_LIMIT) {
+          PowerValue cv = new PowerValueImpl();
+          cv.setTimeStamp(chargeValue.getTimeStamp());
+          cv.setValue(power);
+          result.add(cv);
+        }
+      }
+      prevValue = chargeValue;
+    }
+    return result;
+  }
+
+  /**
+   * add a property to the PowerValue
+   * 
+   * @param prop
+   */
+  public void add(PowerValue prop) {
+    powerValues.add(prop);
+  }
 
 }

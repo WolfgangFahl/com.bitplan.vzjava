@@ -36,6 +36,7 @@ import javax.persistence.Persistence;
  *
  */
 public class VZDB {
+  
 	private javax.persistence.EntityManagerFactory emf;
 	private javax.persistence.EntityManager em;
 	private String PERSISTENCE_UNIT_NAME = "vz";

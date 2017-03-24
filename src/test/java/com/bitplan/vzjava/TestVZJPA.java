@@ -23,10 +23,18 @@ package com.bitplan.vzjava;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import com.bitplan.vzjava.PowerValue.ChannelMode;
+import com.bitplan.vzjava.jpa.PowerValueManagerDao;
 import com.bitplan.vzjava.jpa.PropertiesManagerDao;
 import com.bitplan.vzjava.jpa.VZDB;
 
@@ -79,8 +87,29 @@ public class TestVZJPA {
 						+ "         <pkey>title</pkey>\n" + "         <value>Haus 1.8.0 EVU Bezug</value>"));
 	}
 	
-	@Test
+	@Ignore
 	public void testImportXml() throws Exception {
 		VZDB vzdb=new VZDB(true);
+		File powerValueXmlFile=new File("src/test/data/vzdb/powervalues.xml");
+		String xml=FileUtils.readFileToString(powerValueXmlFile);
+		PowerValueManagerDao pvm=(PowerValueManagerDao) PowerValueManagerDao.getFactoryStatic().fromXML(xml);
+		List<PowerValue> powerValues = pvm.getElements();
+		assertEquals("xml import should have # of records",74669,powerValues.size());
+		String from="2017-01-31 20:00:00";
+		String to="2017-03-24 14:00:00";
+		EntityManager em = vzdb.getEntityManager();
+		em.getTransaction().begin();
+		Query dquery = em.createNativeQuery("delete from data");
+		dquery.executeUpdate();
+		em.getTransaction().commit();
+		em.getTransaction().begin();
+		for (PowerValue powerValue:powerValues) {
+		  em.persist(powerValue);
+		}
+		em.getTransaction().commit();
+		int channel=4;
+    ChannelMode channelMode = ChannelMode.Power;
+    List<PowerValue> dbPowerValues = pvm.get(vzdb, from, to, channel, channelMode);
+    assertEquals("database should have # of imported records",74669,dbPowerValues.size());
 	}
 }
