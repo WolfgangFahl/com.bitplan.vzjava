@@ -49,7 +49,7 @@ public class ConfigResource extends VZResource {
 
   @GET
   public Response showConfig() throws Exception {
-    VZDB vzdb = new VZDB();
+    VZDB vzdb = new VZDB(false);
     Map<String, String> props = vzdb.getProperties();
     for (String key : props.keySet()) {
       if (key.startsWith("javax.persistence.jdbc.")) {

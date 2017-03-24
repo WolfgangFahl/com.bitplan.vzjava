@@ -31,14 +31,17 @@ public interface PowerValue {
 	enum ChannelMode {
 		Power, Counter
 	}
-
+	public int getId();
+    public void setId(int id);
+    
+	public int getChannel_id();
+	public void setChannel_id(int channel_id);
+	
 	public Date getTimeStamp();
-
-	public double getValue();
-
-	public void setValue(double value);
-
 	public void setTimeStamp(Date timeStamp);
+	
+	public double getValue();
+	public void setValue(double value);
 
 	public PowerValue cloneMe();
 }

@@ -38,25 +38,19 @@ import com.bitplan.vzjava.PowerValueImpl;
 // timestamp between :from and :to
 public class PowerValueDao extends PowerValueImpl {
   int id;
-  int channel_id;
-
+  
   @Id
+  @Override
   public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getChannel_id() {
-    return channel_id;
-  }
-
-  public void setChannel_id(int channel_id) {
-    this.channel_id = channel_id;
+    return super.getId();
   }
   
+  @Override
+  public int getChannel_id() {
+	  return super.getChannel_id();
+  }
+
+  @Override
   public double getValue() {
     return super.getValue();
   }

@@ -43,38 +43,41 @@ public class VZDB {
 	private Map<String, String> properties = new HashMap<String, String>();
 	// Java properties
 	Properties jproperties = new Properties();
-	
+
 	public Map<String, String> getProperties() {
-    return properties;
-  }
+		return properties;
+	}
 
-  public void setProperties(Map<String, String> properties) {
-    this.properties = properties;
-  }
+	public void setProperties(Map<String, String> properties) {
+		this.properties = properties;
+	}
 
-  /**
-   * construct the database connector
-   * @throws Exception
-   */
-  public VZDB() throws Exception {
-    init();
-  }
-  
-  /*
-   * initialize the properties map
-   */
-  public void init() throws Exception {
-    String propertyFilesName=System.getProperty("user.home") + "/.vzdb.ini";
-    File propertyFile = new File(propertyFilesName);
-    if (propertyFile.exists()) {
-      jproperties.load(new FileInputStream(propertyFile));
-    }
-    for (final String key : jproperties.stringPropertyNames()) {
-      setProperty(key, jproperties.getProperty(key));
-    }
-  }
-  
-  /**
+	/**
+	 * construct the database connector
+	 * @param testMode 
+	 * 
+	 * @throws Exception
+	 */
+	public VZDB(boolean testMode) throws Exception {
+		if (!testMode)
+			init();
+	}
+
+	/*
+	 * initialize the properties map
+	 */
+	public void init() throws Exception {
+		String propertyFilesName = System.getProperty("user.home") + "/.vzdb.ini";
+		File propertyFile = new File(propertyFilesName);
+		if (propertyFile.exists()) {
+			jproperties.load(new FileInputStream(propertyFile));
+		}
+		for (final String key : jproperties.stringPropertyNames()) {
+			setProperty(key, jproperties.getProperty(key));
+		}
+	}
+
+	/**
 	 * init
 	 */
 	public EntityManager getEntityManager() {
@@ -84,13 +87,14 @@ public class VZDB {
 		}
 		return em;
 	}
-	
+
 	/**
 	 * set a property with the given key and value
+	 * 
 	 * @param key
 	 * @param value
 	 */
-	public void setProperty(String key,String value) {
+	public void setProperty(String key, String value) {
 		properties.put(key, value);
 	}
 

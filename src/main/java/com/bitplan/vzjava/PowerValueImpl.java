@@ -24,42 +24,62 @@ import java.util.Date;
 
 /**
  * the naked ChargePeriod Implementation
+ * 
  * @author wf
  *
  */
 public class PowerValueImpl implements PowerValue, Cloneable {
-  
-  protected double value;
-  Date timeStamp;
-  public double getValue() {
-    return value;
-  }
+	int id;
+	int channel_id;
+	protected double value;
+	Date timeStamp;
 
-  public void setValue(double value) {
-    this.value = value;
-  }
-  public Date getTimeStamp() {
-    return timeStamp;
-  }
+	public int getId() {
+		return id;
+	}
 
-  public void setTimeStamp(Date timestamp) {
-    this.timeStamp = timestamp;
-  }
-  
-  @Override
-  public PowerValue cloneMe() {
-    PowerValue newValue=null;
-    try {
-      newValue = (PowerValue) this.clone();
-    } catch (CloneNotSupportedException e) {
-      throw new RuntimeException("this can't happen");
-    }
-    return newValue;
-  }
-  
-  @Override
-  public Object clone() throws CloneNotSupportedException {
-    return super.clone();
-  }
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getChannel_id() {
+		return channel_id;
+	}
+
+	public void setChannel_id(int channel_id) {
+		this.channel_id = channel_id;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
+	}
+
+	public Date getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(Date timestamp) {
+		this.timeStamp = timestamp;
+	}
+
+	@Override
+	public PowerValue cloneMe() {
+		PowerValue newValue = null;
+		try {
+			newValue = (PowerValue) this.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new RuntimeException("this can't happen");
+		}
+		return newValue;
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		return super.clone();
+	}
 
 }

@@ -25,8 +25,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
-
 import org.junit.Test;
 
 import com.bitplan.vzjava.jpa.PropertiesManagerDao;
@@ -50,38 +48,39 @@ public class TestVZJPA {
 	}
 
 	public static List<Properties> getProperties() throws Exception {
-		if (props==null) {
-		PropertiesManagerDao lpm = getPropertiesManager();
-		props=lpm.getProperties(new VZDB());
+		if (props == null) {
+			PropertiesManagerDao lpm = getPropertiesManager();
+			props = lpm.getProperties(new VZDB(true));
 		}
 		return props;
 	}
 
 	@Test
 	public void testGetProperties() throws Exception {
-		props=getProperties();
+		props = getProperties();
 		for (Properties prop : props) {
 			if (debug)
 				System.out.println(String.format("%3d %3d %s=%s", prop.getId(), prop.getEntity_id(), prop.getPkey(),
 						prop.getValue()));
 		}
-		assertEquals(56,props.size());
+		assertEquals(56, props.size());
 	}
 
 	@Test
-	public void testXml() throws Exception {
-		props=getProperties();
-		String xml=getPropertiesManager().asXML();
+	public void testAsXml() throws Exception {
+		props = getProperties();
+		String xml = getPropertiesManager().asXML();
 		if (debug) {
 			System.out.println(xml);
 		}
-		assertTrue(xml.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
-				"<propertiesManager>\n" + 
-				"   <properties>\n" + 
-				"      <property>\n" + 
-				"         <entity_id>1</entity_id>\n" + 
-				"         <id>1</id>\n" + 
-				"         <pkey>title</pkey>\n" + 
-				"         <value>Haus 1.8.0 EVU Bezug</value>"));
+		assertTrue(xml.startsWith(
+				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<propertiesManager>\n" + "   <properties>\n"
+						+ "      <property>\n" + "         <entity_id>1</entity_id>\n" + "         <id>1</id>\n"
+						+ "         <pkey>title</pkey>\n" + "         <value>Haus 1.8.0 EVU Bezug</value>"));
+	}
+	
+	@Test
+	public void testImportXml() throws Exception {
+		VZDB vzdb=new VZDB(true);
 	}
 }
