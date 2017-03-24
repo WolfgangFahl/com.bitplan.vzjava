@@ -57,7 +57,7 @@ public class PowerValueDao extends PowerValueImpl {
 
   // http://stackoverflow.com/questions/811845/setting-a-jpa-timestamp-column-to-be-generated-by-the-database
 
-  @Column(name = "timestamp", insertable = false)
+  @Column(name = "timestamp", insertable = true)
   @Temporal(TemporalType.TIMESTAMP)
   public Date getTimeStamp() {
     return super.getTimeStamp();

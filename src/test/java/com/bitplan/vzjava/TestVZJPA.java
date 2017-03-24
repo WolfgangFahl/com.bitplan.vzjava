@@ -87,7 +87,9 @@ public class TestVZJPA {
 						+ "         <pkey>title</pkey>\n" + "         <value>Haus 1.8.0 EVU Bezug</value>"));
 	}
 	
-	@Ignore
+	//@Ignore
+	// https://github.com/WolfgangFahl/com.bitplan.vzjava/issues/5
+	@Test
 	public void testImportXml() throws Exception {
 		VZDB vzdb=new VZDB(true);
 		File powerValueXmlFile=new File("src/test/data/vzdb/powervalues.xml");
@@ -110,6 +112,6 @@ public class TestVZJPA {
 		int channel=4;
     ChannelMode channelMode = ChannelMode.Power;
     List<PowerValue> dbPowerValues = pvm.get(vzdb, from, to, channel, channelMode);
-    assertEquals("database should have # of imported records",74669,dbPowerValues.size());
+    assertEquals("database should have # of imported records",74463,dbPowerValues.size());
 	}
 }
