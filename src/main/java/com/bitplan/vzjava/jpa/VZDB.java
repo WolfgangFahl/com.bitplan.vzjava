@@ -20,8 +20,11 @@
  */
 package com.bitplan.vzjava.jpa;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
@@ -36,9 +39,42 @@ public class VZDB {
 	private javax.persistence.EntityManagerFactory emf;
 	private javax.persistence.EntityManager em;
 	private String PERSISTENCE_UNIT_NAME = "vz";
+	// JPA properties
 	private Map<String, String> properties = new HashMap<String, String>();
+	// Java properties
+	Properties jproperties = new Properties();
+	
+	public Map<String, String> getProperties() {
+    return properties;
+  }
 
-	/**
+  public void setProperties(Map<String, String> properties) {
+    this.properties = properties;
+  }
+
+  /**
+   * construct the database connector
+   * @throws Exception
+   */
+  public VZDB() throws Exception {
+    init();
+  }
+  
+  /*
+   * initialize the properties map
+   */
+  public void init() throws Exception {
+    String propertyFilesName=System.getProperty("user.home") + "/.vzdb.ini";
+    File propertyFile = new File(propertyFilesName);
+    if (propertyFile.exists()) {
+      jproperties.load(new FileInputStream(propertyFile));
+    }
+    for (final String key : jproperties.stringPropertyNames()) {
+      setProperty(key, jproperties.getProperty(key));
+    }
+  }
+  
+  /**
 	 * init
 	 */
 	public EntityManager getEntityManager() {

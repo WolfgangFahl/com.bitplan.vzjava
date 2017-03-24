@@ -122,21 +122,21 @@ td {
   background:@(dark_primary_color); /* DARK PRIMARY COLOR */
   color:@(text_icons);
   padding: 2px;
-  position:absolute; top:0px; left:0px; height:32px; right:0px;overflow:hidden;
+  position:absolute; top:0px; left:0px; height:48px; right:0px;overflow:hidden;
 }
 #navigationbox {
   background:@(primary_color); /* PRIMARY COLOR */
   padding:4px;
   color:@(text_icons);
   font-size:18px;
-  position:absolute; top:32px; left:0px; height:32px; right:0px;overflow:hidden;
+  position:absolute; top:48px; left:0px; height:32px; right:0px;overflow:hidden;
 }
 #footerbox {
   background:@(dark_primary_color); /* DARK PRIMARY COLOR */
   position:absolute; bottom:0px; height:24px; left:0px; right:0px; overflow:hidden;
 }
 #contentbox {
-  position:absolute; top:64px; bottom:24px; left:0px; right:0px;
+  position:absolute; top:80px; bottom:24px; left:0px; right:0px;
   background:white;
   overflow-y: scroll;
 }
@@ -159,9 +159,11 @@ td {
   </head>
   <body>
      <div id='headerbox'>
-     <a href='/vz/home' title='Home'><i class='mdi mdi-home headerboxicon'></i><!-- home --></a>
-     <a href='/vz/users' title='Benutzer'><i class='mdi mdi-account-multiple headerboxicon'></i><!-- users --></a>
-     <a href='/vz/help' title='Hilfe'><i class='mdi mdi-help headerboxicon'></i><!-- help --></a>
+       <img src='/images/logo.png'>
+       <a href='/vz/home' title='Home'><i class='mdi mdi-home headerboxicon'></i><!-- home --></a>
+       <a href='/vz/users' title='Benutzer'><i class='mdi mdi-account-multiple headerboxicon'></i><!-- users --></a>
+       <a href='/vz/config' title='Einstellungen'><i class='mdi mdi-settings headerboxicon'></i><!-- config --></a>
+       <a href='/vz/help' title='Hilfe'><i class='mdi mdi-help headerboxicon'></i><!-- help --></a>
      </div>
      <div id='navigationbox' title='@(tooltip)'>@(title)</div>
      <div id='contentbox'>

@@ -49,7 +49,7 @@ public class TestVZJPA {
 		return pm;
 	}
 
-	public static List<Properties> getProperties() {
+	public static List<Properties> getProperties() throws Exception {
 		if (props==null) {
 		PropertiesManagerDao lpm = getPropertiesManager();
 		props=lpm.getProperties(new VZDB());
@@ -58,7 +58,7 @@ public class TestVZJPA {
 	}
 
 	@Test
-	public void testGetProperties() {
+	public void testGetProperties() throws Exception {
 		props=getProperties();
 		for (Properties prop : props) {
 			if (debug)
@@ -69,7 +69,7 @@ public class TestVZJPA {
 	}
 
 	@Test
-	public void testXml() throws JAXBException {
+	public void testXml() throws Exception {
 		props=getProperties();
 		String xml=getPropertiesManager().asXML();
 		if (debug) {
