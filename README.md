@@ -22,17 +22,17 @@ java -jar target/com.bitplan.vzjava-0.0.1-jar-with-dependencies-and-services.jar
 http://localhost:8380
 
 # Tests
-Es gibt 3 JUnit tests für version 0.0.1
+Es gibt 4 JUnit tests für version 0.0.1
 
 ## Tests laufen lassen
 ```
 mvn test
 ...
-Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
 ```
 
 # Versionsgeschichte
 * 0.0.0: 2017-03-23 - Projektrahmen mit Tests - noch keine "nützliche" Funktion
-* 0.0.1: 2017-03-24 - Hilfeseite mit Links, Datenbank-Einstellungs-Dialog (noch ohne Speichern)
+* 0.0.1: 2017-03-25 - Hilfeseite mit Links, Demo-Datenbank, Datenbank-Einstellungs-Dialog (noch ohne Speichern)
 
 
