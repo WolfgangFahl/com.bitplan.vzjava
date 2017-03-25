@@ -26,50 +26,50 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
+import com.bitplan.vzjava.DBConfig;
+import com.bitplan.vzjava.DBConfigImpl;
 import com.bitplan.vzjava.jpa.VZDB;
 
 /**
  * Jersey Resource for Configuration
  */
-@SuppressWarnings("rawtypes")
-@Path("/config")
-public class ConfigResource extends VZResource {
+@Path("/dbconfig")
+public class DBConfigResource extends VZResource<DBConfig,DBConfig> {
 
   /**
    * constructor
    */
-  public ConfigResource() {
-    super.prepareRootMap("Einstellungen", "Einstellungen");
+  public DBConfigResource() {
+    super.prepareRootMap("Datenbank-Einstellungen", "Datenbank-Einstellungen");
   }
 
   @GET
-  public Response showConfig() throws Exception {
-    VZDB vzdb = new VZDB(false);
-    Map<String, String> props = vzdb.getProperties();
-    for (String key : props.keySet()) {
-      if (key.startsWith("javax.persistence.jdbc.")) {
-        String formkey = key.replace("javax.persistence.jdbc.", "");
-        rootMap.put(formkey, props.get(key));
-      }
-    }
-    Response response = super.templateResponse("config.rythm");
+  @Path("{name}")
+  public Response showConfig(@PathParam("name")String configname) throws Exception {
+    VZDB vzdb = new VZDB(configname);
+    rootMap.put("dc",vzdb.getDbConfig());
+    Response response = super.templateResponse("dbconfig.rythm");
     return response;
   }
 
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces({ "text/html" })
-  public Response modifyConfigFromPost(
+  @Path("{name}")
+  public Response modifyConfigFromPost(@PathParam("name")String configname,
       MultivaluedMap<String, String> formParams) {
-    for (String key:formParams.keySet()) {
-      rootMap.put(key, formParams.getFirst(key));
-    }
-    Response response = super.templateResponse("config.rythm");
+    debug=true;
+    Map<String,String> dbConfigMap = super.asMap(formParams);
+    DBConfigImpl dbConfig = new DBConfigImpl();
+    dbConfig.fromMap(dbConfigMap);
+    rootMap.put("dc",dbConfig);
+    Response response = super.templateResponse("dbconfig.rythm");
     return response;
   }
 

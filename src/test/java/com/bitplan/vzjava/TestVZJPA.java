@@ -20,17 +20,18 @@
  */
 package com.bitplan.vzjava;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.bitplan.vzjava.PowerValue.ChannelMode;
@@ -45,73 +46,149 @@ import com.bitplan.vzjava.jpa.VZDB;
  *
  */
 public class TestVZJPA {
-	private static PropertiesManagerDao pm;
-	private static List<Properties> props;
-	boolean debug = false;
+  protected Logger LOGGER = Logger.getLogger("com.bitplan.vzjava");
 
-	public static PropertiesManagerDao getPropertiesManager() {
-		if (pm == null)
-			pm = new PropertiesManagerDao();
-		return pm;
-	}
+  private static PropertiesManagerDao pm;
+  private static List<Properties> props;
+  boolean debug = false;
 
-	public static List<Properties> getProperties() throws Exception {
-		if (props == null) {
-			PropertiesManagerDao lpm = getPropertiesManager();
-			props = lpm.getProperties(new VZDB(true));
-		}
-		return props;
-	}
+  /**
+   * get the properties ManagerDao
+   * 
+   * @return
+   */
+  public static PropertiesManagerDao getPropertiesManager() {
+    if (pm == null)
+      pm = new PropertiesManagerDao();
+    return pm;
+  }
 
-	@Test
-	public void testGetProperties() throws Exception {
-		props = getProperties();
-		for (Properties prop : props) {
-			if (debug)
-				System.out.println(String.format("%3d %3d %s=%s", prop.getId(), prop.getEntity_id(), prop.getPkey(),
-						prop.getValue()));
-		}
-		assertEquals(56, props.size());
-	}
+  /**
+   * get all Properties
+   * 
+   * @return the Properties
+   * @throws Exception
+   */
+  public static List<Properties> getProperties() throws Exception {
+    if (props == null) {
+      PropertiesManagerDao lpm = getPropertiesManager();
+      props = lpm.getProperties(new VZDB("demo"));
+    }
+    return props;
+  }
 
-	@Test
-	public void testAsXml() throws Exception {
-		props = getProperties();
-		String xml = getPropertiesManager().asXML();
-		if (debug) {
-			System.out.println(xml);
-		}
-		assertTrue(xml.startsWith(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + "<propertiesManager>\n" + "   <properties>\n"
-						+ "      <property>\n" + "         <entity_id>1</entity_id>\n" + "         <id>1</id>\n"
-						+ "         <pkey>title</pkey>\n" + "         <value>Haus 1.8.0 EVU Bezug</value>"));
-	}
-	
-	//@Ignore
-	// https://github.com/WolfgangFahl/com.bitplan.vzjava/issues/5
-	@Test
-	public void testImportXml() throws Exception {
-		VZDB vzdb=new VZDB(true);
-		File powerValueXmlFile=new File("src/test/data/vzdb/powervalues.xml");
-		String xml=FileUtils.readFileToString(powerValueXmlFile);
-		PowerValueManagerDao pvm=(PowerValueManagerDao) PowerValueManagerDao.getFactoryStatic().fromXML(xml);
-		List<PowerValue> powerValues = pvm.getElements();
-		assertEquals("xml import should have # of records",74669,powerValues.size());
-		String from="2017-01-31 20:00:00";
-		String to="2017-03-24 14:00:00";
-		EntityManager em = vzdb.getEntityManager();
-		em.getTransaction().begin();
-		Query dquery = em.createNativeQuery("delete from data");
-		dquery.executeUpdate();
-		em.getTransaction().commit();
-		em.getTransaction().begin();
-		for (PowerValue powerValue:powerValues) {
-		  em.persist(powerValue);
-		}
-		em.getTransaction().commit();
-		int channel=4;
+  /**
+   * test getting all properties from the test database
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void testGetProperties() throws Exception {
+    props = getProperties();
+    for (Properties prop : props) {
+      if (debug)
+        System.out.println(String.format("%3d %3d %s=%s", prop.getId(),
+            prop.getEntity_id(), prop.getPkey(), prop.getValue()));
+    }
+    // the number of properties in the test database is exactly 56
+    assertEquals(56, props.size());
+  }
+
+  /***
+   * test getting the properties in XML format
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void testAsXml() throws Exception {
+    props = getProperties();
+    String xml = getPropertiesManager().asXML();
+    if (debug) {
+      System.out.println(xml);
+    }
+    assertTrue(xml.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        + "<propertiesManager>\n" + "   <properties>\n" + "      <property>\n"
+        + "         <entity_id>1</entity_id>\n" + "         <id>1</id>\n"
+        + "         <pkey>title</pkey>\n"
+        + "         <value>Haus 1.8.0 EVU Bezug</value>"));
+  }
+
+  @Test
+  public void testDBConfig() throws Exception {
+    VZDB vzdb = new VZDB("demo");
+    debug = false;
+    // set to true if you'd like to see unencrypted passwords in debug mode
+    boolean showPasswords = true;
+    /*
+     * EntityManager em = vzdb.getEntityManager();
+     * Map<String, Object> emprops = em.getProperties();
+     * if (debug) {
+     * for (String key : emprops.keySet()) {
+     * String value = (String) emprops.get(key);
+     * if (!key.contains("password") || showPasswords)
+     * LOGGER.log(Level.INFO, "entity manager property "+key + "=" + value);
+     * }
+     * }
+     */
+    DBConfig dbConfig = vzdb.getDbConfig();
+    Map<String, String> fields = dbConfig.asMap();
+    if (debug) {
+      for (String key : fields.keySet()) {
+        String value = fields.get(key);
+        if (!key.contains("password") || showPasswords)
+          LOGGER.log(Level.INFO, "dbConfig " + key + "=" + value);
+      }
+    }
+    dbConfig = new DBConfigImpl();
+    dbConfig.setName("xyzNeverUsed4711-z");
+    dbConfig.setDriver("invalid Driver");
+    try {
+      dbConfig.testConnection();
+      fail("invalid Driver should throw an exception");
+    } catch (ClassNotFoundException cfe) {
+      assertEquals("invalid Driver",cfe.getMessage());
+    }
+  }
+
+  // @Ignore
+  /**
+   * test importing power VAlues in XML Format
+   * 
+   * @throws Exception
+   */
+  // https://github.com/WolfgangFahl/com.bitplan.vzjava/issues/5
+  @Test
+  public void testImportXml() throws Exception {
+    // open the testdatabase
+    VZDB vzdb = new VZDB("demo");
+    // get the power values from the XML file
+    File powerValueXmlFile = new File("src/test/data/vzdb/powervalues.xml");
+    String xml = FileUtils.readFileToString(powerValueXmlFile);
+    PowerValueManagerDao pvm = (PowerValueManagerDao) PowerValueManagerDao
+        .getFactoryStatic().fromXML(xml);
+    List<PowerValue> powerValues = pvm.getElements();
+    // there should be 74669 power values in this test set
+    assertEquals("xml import should have # of records", 74669,
+        powerValues.size());
+    // delete existing data from the test database
+    EntityManager em = vzdb.getEntityManager();
+    em.getTransaction().begin();
+    Query dquery = em.createNativeQuery("delete from data");
+    dquery.executeUpdate();
+    em.getTransaction().commit();
+
+    String from = "2017-01-31 20:00:00";
+    String to = "2017-03-24 14:00:00";
+    em.getTransaction().begin();
+    for (PowerValue powerValue : powerValues) {
+      em.persist(powerValue);
+    }
+    em.getTransaction().commit();
+    int channel = 4;
     ChannelMode channelMode = ChannelMode.Power;
-    List<PowerValue> dbPowerValues = pvm.get(vzdb, from, to, channel, channelMode);
-    assertEquals("database should have # of imported records",74463,dbPowerValues.size());
-	}
+    List<PowerValue> dbPowerValues = pvm.get(vzdb, from, to, channel,
+        channelMode);
+    assertEquals("database should have # of imported records", 74463,
+        dbPowerValues.size());
+  }
 }

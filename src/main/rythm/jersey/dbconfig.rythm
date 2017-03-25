@@ -1,0 +1,52 @@
+@include("base.rythm")
+@import com.bitplan.vzjava.DBConfig
+@args() { String title, String comment, String tooltip, DBConfig dc }@//args
+@header(title,tooltip,comment)
+<form method='post'>
+	<fieldset>
+		<legend>
+			<i class='mdi mdi-settings'></i>Volkszähler Datenbank
+		</legend>
+		<table>
+			<tr>
+				<td align='right'><label for="name">name:</label></td>
+				<td><input name='name' required placeholder='demo' size='60'
+					type='text' value='@(dc.getName())'></td>
+			</tr>
+			<tr>
+				<td align='right'><label for="driver">driver:</label></td>
+				<td colspan='3'><select name="driver"> @{ String[]
+						options={"MySQL","PostgreSQL","SQLite"}; String[]
+						values={"com.mysql.cj.jdbc.Driver","org.postgresql.Driver","org.sqlite.JDBC"};
+						int index=0; } @for (String option:options) {
+						<option value="@(values[index++])")>@(option)</option> }
+				</select></td>
+			</tr>
+			<tr>
+				<td align='right'><label for="url">url:</label></td>
+				<td><input name='url' required
+					placeholder='jdbc:mysql://localhost:3306/volkszaehler' size='60'
+					type='text' value='@(dc.getUrl())'></td>
+			</tr>
+			<tr>
+				<td align='right'><label for="user">user:</label></td>
+				<td><input name='user' required placeholder='vz' size='60'
+					type='text' value='@(dc.getUser())'></td>
+			</tr>
+			<tr>
+				<td align='right'><label for="password">password:</label></td>
+				<td><input name='password' required size='60' type='password'
+					value='@(dc.getPassword())'></td>
+			</tr>
+			<tr>
+				<td align='right'><label for="password2">wiederhole
+						password:</label></td>
+				<td><input name='password2' required size='60' type='password'
+					value='@(dc.getPassword2())'></td>
+			</tr>
+		</table>
+	</fieldset>
+	<input type="submit" id="test" value='test'> <input
+		type="submit" id="submit" value='speichern'>
+</form>
+@footer()

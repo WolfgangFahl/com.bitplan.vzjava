@@ -20,18 +20,45 @@
  */
 package com.bitplan.vzjava;
 
-import org.junit.Test;
+import java.util.Properties;
+
+import com.bitplan.persistence.Postable;
 
 /**
- * test the RESTFul api of this application
+ * Database configuration
  * @author wf
  *
  */
-public class TestVZRestFul extends TestVZServer {
-	@Test
-	public void testMenu() throws Exception {
-		check("/vz/home","Home");
-		check("/vz/users","Benutzer");
-		check("/vz/help","Hilfe");
-	}
+public interface DBConfig extends Postable<DBConfig> {
+  String getName();
+
+  void setName(String name);
+
+  String getDriver();
+
+  void setDriver(String driver);
+
+  String getUrl();
+
+  void setUrl(String url);
+
+  String getUser();
+
+  void setUser(String user);
+
+  String getPassword();
+
+  void setPassword(String password);
+
+  String getPassword2();
+
+  void setPassword2(String password2);
+
+  /**
+   * test the connection and return the clientInfo for it
+   * @return the client Info properties
+   * @throws Exception
+   */
+  Properties testConnection() throws Exception;
+  void save();
 }

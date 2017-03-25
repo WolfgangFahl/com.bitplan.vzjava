@@ -20,14 +20,14 @@
  */
 package com.bitplan.vzjava.jpa;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+
+import com.bitplan.vzjava.DBConfig;
+import com.bitplan.vzjava.DBConfigImpl;
 
 /**
  * JPA access to Volkszähler database
@@ -36,77 +36,96 @@ import javax.persistence.Persistence;
  *
  */
 public class VZDB {
-  
-	private javax.persistence.EntityManagerFactory emf;
-	private javax.persistence.EntityManager em;
-	private String PERSISTENCE_UNIT_NAME = "vz";
-	// JPA properties
-	private Map<String, String> properties = new HashMap<String, String>();
-	// Java properties
-	Properties jproperties = new Properties();
 
-	public Map<String, String> getProperties() {
-		return properties;
-	}
+  private javax.persistence.EntityManagerFactory emf;
+  private javax.persistence.EntityManager em;
+  private String PERSISTENCE_UNIT_NAME = "vz";
+  // JPA properties
+  private Map<String, String> properties = new HashMap<String, String>();
+  private DBConfig dbConfig;
 
-	public void setProperties(Map<String, String> properties) {
-		this.properties = properties;
-	}
+  public Map<String, String> getProperties() {
+    return properties;
+  }
 
-	/**
-	 * construct the database connector
-	 * @param testMode 
-	 * 
-	 * @throws Exception
-	 */
-	public VZDB(boolean testMode) throws Exception {
-		if (!testMode)
-			init();
-	}
+  public void setProperties(Map<String, String> properties) {
+    this.properties = properties;
+  }
 
-	/*
-	 * initialize the properties map
-	 */
-	public void init() throws Exception {
-		String propertyFilesName = System.getProperty("user.home") + "/.vzdb.ini";
-		File propertyFile = new File(propertyFilesName);
-		if (propertyFile.exists()) {
-			jproperties.load(new FileInputStream(propertyFile));
-		}
-		for (final String key : jproperties.stringPropertyNames()) {
-			setProperty(key, jproperties.getProperty(key));
-		}
-	}
+  public DBConfig getDbConfig() {
+    return dbConfig;
+  }
 
-	/**
-	 * init
-	 */
-	public EntityManager getEntityManager() {
-		if (em == null) {
-			emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, properties);
-			em = emf.createEntityManager();
-		}
-		return em;
-	}
+  public void setDbConfig(DBConfig dbConfig) {
+    this.dbConfig = dbConfig;
+  }
 
-	/**
-	 * set a property with the given key and value
-	 * 
-	 * @param key
-	 * @param value
-	 */
-	public void setProperty(String key, String value) {
-		properties.put(key, value);
-	}
+  /**
+   * construct the database connector
+   * 
+   * @param testMode
+   * 
+   * @throws Exception
+   */
+  public VZDB(String dbConfigName) throws Exception {
+    init(dbConfigName);
+  }
 
-	/**
-	 * close
-	 */
-	public void close() {
-		em.close();
-		em = null;
-		emf.close();
-		emf = null;
-	}
+  /**
+   * initialize the properties map for the given Database Configuration name
+   * 
+   * @param dbConfigName
+   *          - the name of the database configuration
+   */
+  public void init(String dbConfigName) throws Exception {
+    dbConfig = DBConfigImpl.getDBConfig(dbConfigName);
+    if (dbConfig == null) {
+      dbConfig=new DBConfigImpl();
+      dbConfig.setName("demo");
+      Map<String, Object> emprops = getEntityManager().getProperties();
+      dbConfig.setUrl((String) emprops.get("javax.persistence.jdbc.url"));
+      dbConfig.setDriver((String) emprops.get("javax.persistence.jdbc.driver"));
+      if (emprops.containsKey("javax.persistence.jdbc.user")) dbConfig.setUser((String) emprops.get("javax.persistence.jdbc.user"));
+      if (emprops.containsKey("javax.persistence.jdbc.password")) dbConfig.setPassword((String) emprops.get("javax.persistence.jdbc.password"));
+    } else {
+      Map<String, String> dbConfigMap = dbConfig.asMap();
+      String[] keys = { "driver", "url", "user", "password" };
+      for (final String key : keys) {
+        setProperty("javax.persistence.jdbc." + key, dbConfigMap.get(key));
+      }
+    }
+  }
+
+  /**
+   * init
+   */
+  public EntityManager getEntityManager() {
+    if (em == null) {
+      emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME,
+          properties);
+      em = emf.createEntityManager();
+    }
+    return em;
+  }
+
+  /**
+   * set a property with the given key and value
+   * 
+   * @param key
+   * @param value
+   */
+  public void setProperty(String key, String value) {
+    properties.put(key, value);
+  }
+
+  /**
+   * close
+   */
+  public void close() {
+    em.close();
+    em = null;
+    emf.close();
+    emf = null;
+  }
 
 }
