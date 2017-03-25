@@ -1,0 +1,8 @@
+@include("base.rythm")
+@import com.bitplan.vzjava.DBConfigImpl
+@args() { String title, String comment, String tooltip, String isoFrom, String isoTo, String pngFile; }@//args
+@header(title,tooltip,comment)
+@(DBConfigImpl.getConfigName())
+@(isoFrom)-@(isoTo)<br>
+<img src='/vz/plot/file/@(pngFile)'>
+@footer()

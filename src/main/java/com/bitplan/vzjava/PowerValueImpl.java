@@ -66,7 +66,6 @@ public class PowerValueImpl implements PowerValue, Cloneable {
 		this.timeStamp = timestamp;
 	}
 
-	@Override
 	public PowerValue cloneMe() {
 		PowerValue newValue = null;
 		try {

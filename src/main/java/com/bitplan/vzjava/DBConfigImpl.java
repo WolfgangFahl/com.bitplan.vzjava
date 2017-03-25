@@ -300,7 +300,7 @@ public class DBConfigImpl implements DBConfig {
         if (password!=null) {
           dbConfig.setPassword(dbConfigInfo.getCrypt().decrypt(password));
         }
-      } catch (GeneralSecurityException | IOException e) {
+      } catch (Exception e) {
         LOGGER.log(Level.WARNING,"decrypting password fails "+e.getMessage());
       }
       dbConfig.setPassword2(dbConfig.getPassword());

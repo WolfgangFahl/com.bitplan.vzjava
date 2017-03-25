@@ -46,7 +46,7 @@ import com.bitplan.vzjava.jpa.VZDB;
  *
  */
 public class TestVZJPA {
-  protected Logger LOGGER = Logger.getLogger("com.bitplan.vzjava");
+  protected static Logger LOGGER = Logger.getLogger("com.bitplan.vzjava");
 
   private static PropertiesManagerDao pm;
   private static List<Properties> props;
@@ -186,7 +186,8 @@ public class TestVZJPA {
     em.getTransaction().commit();
     int channel = 4;
     ChannelMode channelMode = ChannelMode.Power;
-    List<PowerValue> dbPowerValues = pvm.get(vzdb, from, to, channel,
+    pvm.setVzdb(vzdb);
+    List<PowerValue> dbPowerValues = pvm.get(from, to, channel,
         channelMode);
     assertEquals("database should have # of imported records", 74463,
         dbPowerValues.size());

@@ -20,13 +20,35 @@
  */
 package com.bitplan.vzjava;
 
+import java.util.List;
+
 import com.bitplan.persistence.Manager;
+import com.bitplan.vzjava.jpa.VZDB;
 
 /**
  * power Value Manager
+ * 
  * @author wf
  *
  */
-public interface PowerValueManager extends Manager<PowerValueManager,PowerValue> {
+public interface PowerValueManager
+    extends Manager<PowerValueManager, PowerValue> {
 
+  public VZDB getVzdb();
+
+  public void setVzdb(VZDB vzdb);
+
+  /**
+   * get power values
+   * 
+   * @param vz
+   * @param isoFrom
+   * @param isoTo
+   * @param channel
+   * @param channelMode
+   * @return the power Values
+   * @throws Exception
+   */
+  public List<PowerValue> get(String isoFrom, String isoTo, int channel,
+      PowerValue.ChannelMode channelMode) throws Exception;
 }

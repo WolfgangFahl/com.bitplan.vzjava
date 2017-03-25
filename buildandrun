@@ -1,5 +1,5 @@
 #!/bin/bash
 # 2017-03-24
 version=0.0.1
-mvn package assembly:single
+mvn clean package assembly:single
 java -jar target/com.bitplan.vzjava-${version}-jar-with-dependencies-and-services.jar 

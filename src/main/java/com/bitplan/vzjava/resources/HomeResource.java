@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response;
 /**
  * Jersey Resource for Home
  */
+@SuppressWarnings("rawtypes")
 @Path("/home")
 public class HomeResource extends VZResource {
 
@@ -34,7 +35,7 @@ public class HomeResource extends VZResource {
    * constructor
    */
   public HomeResource() {
-	super.prepareRootMap("Home","home");
+    super.prepareRootMap("Home", "home");
   }
 
   @GET
@@ -42,6 +43,5 @@ public class HomeResource extends VZResource {
     Response response = super.templateResponse("home.rythm");
     return response;
   }
-
 
 } // HomeResource
