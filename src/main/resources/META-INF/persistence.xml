@@ -10,6 +10,8 @@
       <properties>
         <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
         <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:src/test/data/vzdb/vztest.db" />
+        <property name="javax.persistence.jdbc.user" value="vz" />
+        <property name="javax.persistence.jdbc.password" value="vz" />
         <property name="eclipselink.ddl-generation" value="create-tables" />
         <!--  debug SQL 
 			<property name="eclipselink.logging.level" value="FINE"/>

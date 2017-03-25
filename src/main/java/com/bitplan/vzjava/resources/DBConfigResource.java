@@ -40,7 +40,7 @@ import com.bitplan.vzjava.jpa.VZDB;
  * Jersey Resource for Configuration
  */
 @Path("/dbconfig")
-public class DBConfigResource extends VZResource<DBConfig,DBConfig> {
+public class DBConfigResource extends VZResource<DBConfig, DBConfig> {
 
   /**
    * constructor
@@ -50,10 +50,71 @@ public class DBConfigResource extends VZResource<DBConfig,DBConfig> {
   }
 
   @GET
-  @Path("{name}")
-  public Response showConfig(@PathParam("name")String configname) throws Exception {
+  @Path("{configname}")
+  public Response showConfig(@PathParam("configname") String configname)
+      throws Exception {
     VZDB vzdb = new VZDB(configname);
-    rootMap.put("dc",vzdb.getDbConfig());
+    rootMap.put("dc", vzdb.getDbConfig());
+    Response response = super.templateResponse("dbconfig.rythm");
+    return response;
+  }
+
+  @GET
+  public Response showConfig() throws Exception {
+    String configname = DBConfigImpl.getConfigName();
+    return showConfig(configname);
+  }
+
+  /**
+   * get the Database Configuration from the Form
+   * 
+   * @param formParams
+   * @return
+   */
+  public DBConfig fromForm(MultivaluedMap<String, String> formParams) {
+    debug = true;
+    Map<String, String> dbConfigMap = super.asMap(formParams);
+    DBConfigImpl dbConfig = new DBConfigImpl();
+    dbConfig.fromMap(dbConfigMap);
+    rootMap.put("dc", dbConfig);
+    return dbConfig;
+  }
+
+  @POST
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  @Produces({ "text/html" })
+  @Path("{configname}")
+  public Response workOnConfigFromPost(@PathParam("name") String configname,
+      MultivaluedMap<String, String> formParams) {
+    DBConfig dbConfig = fromForm(formParams);
+    String cmd = formParams.getFirst("cmd");
+    if ("save".equals(cmd) || "test".equals(cmd)) {
+      if (!dbConfig.getPassword().equals(dbConfig.getPassword2())) {
+        rootMap.put("error", true);
+        rootMap.put("message", "check passwords");
+      }
+    }
+    if (!rootMap.containsKey("error")) {
+      if ("save".equals(cmd)) {
+        try {
+          dbConfig.save();
+          rootMap.put("error", false);
+          rootMap.put("message", "saved");
+        } catch (Throwable th) {
+          rootMap.put("error", true);
+          rootMap.put("message", th.getMessage());
+        }
+      } else if ("test".equals(cmd)) {
+        try {
+          dbConfig.testConnection();
+          rootMap.put("error", false);
+          rootMap.put("message", "ok");
+        } catch (Throwable th) {
+          rootMap.put("error", true);
+          rootMap.put("message", th.getMessage());
+        }
+      }
+    }
     Response response = super.templateResponse("dbconfig.rythm");
     return response;
   }
@@ -61,16 +122,10 @@ public class DBConfigResource extends VZResource<DBConfig,DBConfig> {
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces({ "text/html" })
-  @Path("{name}")
-  public Response modifyConfigFromPost(@PathParam("name")String configname,
+  public Response workOnConfigFromPost(
       MultivaluedMap<String, String> formParams) {
-    debug=true;
-    Map<String,String> dbConfigMap = super.asMap(formParams);
-    DBConfigImpl dbConfig = new DBConfigImpl();
-    dbConfig.fromMap(dbConfigMap);
-    rootMap.put("dc",dbConfig);
-    Response response = super.templateResponse("dbconfig.rythm");
-    return response;
+    String configname = formParams.getFirst("name");
+    return this.workOnConfigFromPost(configname, formParams);
   }
 
-} // ConfigResource
+} // DBConfigResource

@@ -60,5 +60,10 @@ public interface DBConfig extends Postable<DBConfig> {
    * @throws Exception
    */
   Properties testConnection() throws Exception;
-  void save();
+  
+  /**
+   * save my settings
+   * @throws Exception 
+   */
+  void save() throws Exception;
 }

@@ -1,6 +1,6 @@
 @include("base.rythm")
 @import com.bitplan.vzjava.DBConfig
-@args() { String title, String comment, String tooltip, DBConfig dc }@//args
+@args() { String title, String comment, String tooltip, DBConfig dc, boolean error, String message }@//args
 @header(title,tooltip,comment)
 <form method='post'>
 	<fieldset>
@@ -15,11 +15,13 @@
 			</tr>
 			<tr>
 				<td align='right'><label for="driver">driver:</label></td>
-				<td colspan='3'><select name="driver"> @{ String[]
-						options={"MySQL","PostgreSQL","SQLite"}; String[]
-						values={"com.mysql.cj.jdbc.Driver","org.postgresql.Driver","org.sqlite.JDBC"};
-						int index=0; } @for (String option:options) {
-						<option value="@(values[index++])")>@(option)</option> }
+				<td colspan='3'><select name="driver"> @{ 
+				        String[] options={"MySQL","PostgreSQL","SQLite"}; 
+						String[] values={"com.mysql.cj.jdbc.Driver","org.postgresql.Driver","org.sqlite.JDBC"};
+						int index=0; } 
+						@for (String value:values) {
+						<option value="@(value)" @if(value.equals(dc.getDriver())){ selected }>@(options[index++])</option> 
+						}
 				</select></td>
 			</tr>
 			<tr>
@@ -44,9 +46,19 @@
 				<td><input name='password2' required size='60' type='password'
 					value='@(dc.getPassword2())'></td>
 			</tr>
+			<tr><td colspan='2'>
+			@if(message) {
+@if(error) {
+<div style='color:red'>@(message)</div>
+} else {
+<div style='color:green'>@(message)✓</div>
+}
+}
+			</td></tr>
 		</table>
 	</fieldset>
-	<input type="submit" id="test" value='test'> <input
-		type="submit" id="submit" value='speichern'>
+	<input type="text" id="dbconfig.cmd" name="cmd" value="save" hidden=true>
+	<input type="submit" id="test"   value='test' onclick="document.getElementById('dbconfig.cmd').value = 'test';"> 
+	<input type="submit" id="submit" value='speichern'>
 </form>
 @footer()

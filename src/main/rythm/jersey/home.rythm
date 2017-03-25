@@ -1,4 +1,6 @@
 @include("base.rythm")
+@import com.bitplan.vzjava.DBConfigImpl
 @args() { String title, String comment, String tooltip; }@//args
 @header(title,tooltip,comment)
+@(DBConfigImpl.getConfigName())
 @footer()

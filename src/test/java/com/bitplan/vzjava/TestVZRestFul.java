@@ -32,6 +32,7 @@ public class TestVZRestFul extends TestVZServer {
 	public void testMenu() throws Exception {
 		check("/vz/home","Home");
 		check("/vz/users","Benutzer");
+		check("/vz/dbconfig","Datenbank-Einstellungen");
 		check("/vz/help","Hilfe");
 	}
 }

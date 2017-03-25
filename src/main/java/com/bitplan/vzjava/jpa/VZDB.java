@@ -86,7 +86,10 @@ public class VZDB {
       dbConfig.setUrl((String) emprops.get("javax.persistence.jdbc.url"));
       dbConfig.setDriver((String) emprops.get("javax.persistence.jdbc.driver"));
       if (emprops.containsKey("javax.persistence.jdbc.user")) dbConfig.setUser((String) emprops.get("javax.persistence.jdbc.user"));
-      if (emprops.containsKey("javax.persistence.jdbc.password")) dbConfig.setPassword((String) emprops.get("javax.persistence.jdbc.password"));
+      if (emprops.containsKey("javax.persistence.jdbc.password")) {
+        dbConfig.setPassword((String) emprops.get("javax.persistence.jdbc.password"));
+        dbConfig.setPassword2(dbConfig.getPassword());
+      }
     } else {
       Map<String, String> dbConfigMap = dbConfig.asMap();
       String[] keys = { "driver", "url", "user", "password" };

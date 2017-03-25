@@ -162,7 +162,7 @@ td {
        <img src='/images/logo.png'>
        <a href='/vz/home' title='Home'><i class='mdi mdi-home headerboxicon'></i><!-- home --></a>
        <a href='/vz/users' title='Benutzer'><i class='mdi mdi-account-multiple headerboxicon'></i><!-- users --></a>
-       <a href='/vz/dbconfig/demo' title='Einstellungen'><i class='mdi mdi-settings headerboxicon'></i><!-- config --></a>
+       <a href='/vz/dbconfig' title='Einstellungen'><i class='mdi mdi-settings headerboxicon'></i><!-- config --></a>
        <a href='/vz/help' title='Hilfe'><i class='mdi mdi-help headerboxicon'></i><!-- help --></a>
      </div>
      <div id='navigationbox' title='@(tooltip)'>@(title)</div>
