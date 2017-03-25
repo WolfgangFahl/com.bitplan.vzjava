@@ -4,8 +4,8 @@
 <h3>&nbsp;Links</h3>
  <ul>
    <li><a href='https://github.com/WolfgangFahl/com.bitplan.vzjava'>Java Frontend für Volkszähler</a>
-   <li><a href='https://github.com/volkszaehler/volkszaehler.org'>Volkzähler on github</a>
-   <li><a href='http://volkszaehler.org'>Volkzähler Website</a>
-   <li><a href='http://wiki.volkszaehler.org'>Volkzähler Wiki</a>
+   <li><a href='https://github.com/volkszaehler/volkszaehler.org'>Volkszähler on github</a>
+   <li><a href='http://volkszaehler.org'>Volkszähler Website</a>
+   <li><a href='http://wiki.volkszaehler.org'>Volkszähler Wiki</a>
   </ul>
 @footer()
