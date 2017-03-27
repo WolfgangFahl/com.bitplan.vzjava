@@ -61,6 +61,15 @@ public class VZDB {
   }
 
   /**
+   * default constructor
+   * @throws Exception
+   */
+  public VZDB() throws Exception {
+    String configname = DBConfigImpl.getConfigName();
+    init(configname);
+  }
+  
+  /**
    * construct the database connector
    * 
    * @param testMode

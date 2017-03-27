@@ -37,7 +37,6 @@ import com.bitplan.datatypes.TypeConverter;
 import com.bitplan.jaxb.JaxbFactory;
 import com.bitplan.jaxb.JaxbFactoryApi;
 import com.bitplan.jaxb.ManagerImpl;
-import com.bitplan.vzjava.DBConfigImpl;
 import com.bitplan.vzjava.PowerValue;
 import com.bitplan.vzjava.PowerValueImpl;
 import com.bitplan.vzjava.PowerValueManager;
@@ -63,11 +62,12 @@ public class PowerValueManagerDao extends
 
   // make JAXB happy
   public PowerValueManagerDao() {
-    
+
   }
-  
+
   /**
    * construct me with a Volkszähler Database
+   * 
    * @param lvzdb
    */
   public PowerValueManagerDao(VZDB lvzdb) {
@@ -84,11 +84,11 @@ public class PowerValueManagerDao extends
   public VZDB getVzdb() {
     return vzdb;
   }
-  
+
   public void setVzdb(VZDB vzdb) {
-    this.vzdb=vzdb;
+    this.vzdb = vzdb;
   }
-  
+
   public void setPowerValues(List<PowerValue> PowerValue) {
     this.powerValues = PowerValue;
   }
@@ -110,6 +110,7 @@ public class PowerValueManagerDao extends
 
   /**
    * get values base on String time stamps
+   * 
    * @param vz
    * @param isoFrom
    * @param isoTo
@@ -120,18 +121,19 @@ public class PowerValueManagerDao extends
    */
   public List<PowerValue> get(String isoFrom, String isoTo, int channel,
       PowerValue.ChannelMode channelMode) throws Exception {
-    TypeConverter tc=new DefaultTypeConverter();
-    //Date fromDate = isoDateFormatter.parse(isoFrom);
-    //Date toDate = isoDateFormatter.parse(isoTo);
-    Date fromDate=tc.getDate(isoFrom);
-    Date toDate=tc.getDate(isoTo);
-    Calendar from=Calendar.getInstance();
+    TypeConverter tc = new DefaultTypeConverter();
+    // Date fromDate = isoDateFormatter.parse(isoFrom);
+    // Date toDate = isoDateFormatter.parse(isoTo);
+    Date fromDate = tc.getDate(isoFrom);
+    Date toDate = tc.getDate(isoTo);
+    Calendar from = Calendar.getInstance();
     from.setTime(fromDate);
-    Calendar to=Calendar.getInstance();
+    Calendar to = Calendar.getInstance();
     to.setTime(toDate);
     List<PowerValue> result = this.get(from, to, channel, channelMode);
     return result;
   }
+
   /**
    * get the values
    * 
@@ -179,8 +181,7 @@ public class PowerValueManagerDao extends
    * @param channel
    * @return
    */
-  public List<PowerValue> getPower(Calendar from, Calendar to,
-      int channel) {
+  public List<PowerValue> getPower(Calendar from, Calendar to, int channel) {
     @SuppressWarnings("unchecked")
     TypedQuery<PowerValueDao> query = (TypedQuery<PowerValueDao>) vzdb
         .getEntityManager().createNamedQuery("Data.period");
@@ -203,8 +204,8 @@ public class PowerValueManagerDao extends
    * @param channel
    * @return
    */
-  public List<PowerValue> getPowerFromCounter(Calendar from,
-      Calendar to, int channel) {
+  public List<PowerValue> getPowerFromCounter(Calendar from, Calendar to,
+      int channel) {
     List<PowerValue> powerValues = getPower(from, to, channel);
     List<PowerValue> result = new ArrayList<PowerValue>();
     PowerValue prevValue = null;
@@ -234,13 +235,24 @@ public class PowerValueManagerDao extends
 
   /**
    * get an instance based on the configured VZDB
+   * 
    * @return
    * @throws Exception
    */
   public static PowerValueManagerDao getVZInstance() throws Exception {
-    String configname = DBConfigImpl.getConfigName();
-    VZDB lvzdb = new VZDB(configname);
-    PowerValueManagerDao pvm = new PowerValueManagerDao(lvzdb);
+    VZDB lvzdb = new VZDB();
+    return getVZInstance(lvzdb);
+  }
+
+  /**
+   * get an instance based on the given VZDB
+   * @param pvzdb
+   * @return - a PowerValueManagerDao
+   * @throws Exception
+   */
+  public static PowerValueManagerDao getVZInstance(VZDB pvzdb)
+      throws Exception {
+    PowerValueManagerDao pvm = new PowerValueManagerDao(pvzdb);
     return pvm;
   }
 

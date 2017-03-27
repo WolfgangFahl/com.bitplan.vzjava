@@ -23,10 +23,8 @@ package com.bitplan.vzjava.resources;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,9 +40,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.lang3.time.DateUtils;
 
-import com.bitplan.vzjava.PowerValue;
-import com.bitplan.vzjava.PowerValuePlot;
-import com.bitplan.vzjava.jpa.PowerValueManagerDao;
+import com.bitplan.vzjava.PowerValuePlotManager;
 
 @SuppressWarnings("rawtypes")
 @Path("/plot")
@@ -52,25 +48,24 @@ public class PowerPlotResource extends VZResource {
   protected static Logger LOGGER = Logger
       .getLogger("com.bitplan.vzjava.resources");
 
-  static java.nio.file.Path tmpDir = null;
-
   /**
    * Power Plot Resource constructor
    */
   public PowerPlotResource() {
     super.prepareRootMap("Plot", "Plot");
   }
-
-  /**
-   * get a temporary Directory
-   * 
-   * @return
-   * @throws Exception
-   */
-  public static java.nio.file.Path getTempDirectory() throws Exception {
-    if (tmpDir == null)
-      tmpDir = Files.createTempDirectory("powerRange");
-    return tmpDir;
+  
+  @GET
+  @Path("/range/{isoFrom}/{isoTo}/plot") 
+  public Response getPlotFileForRange(
+      @HeaderParam("If-Modified-Since") String modified,
+      @QueryParam("width") @DefaultValue("1024") int width,
+      @QueryParam("height") @DefaultValue("768") int height,
+      @PathParam("isoFrom") String isoFrom, @PathParam("isoTo") String isoTo)
+          throws Exception {
+    File pngFile=PowerValuePlotManager.getInstance().getPlot(isoFrom, isoTo, width, height);
+    Response result = returnFile(pngFile, modified);
+    return result;
   }
 
   @GET
@@ -80,30 +75,11 @@ public class PowerPlotResource extends VZResource {
       @QueryParam("height") @DefaultValue("768") int height,
       @PathParam("isoFrom") String isoFrom, @PathParam("isoTo") String isoTo)
           throws Exception {
-    PowerValueManagerDao pvm = PowerValueManagerDao.getVZInstance();
-    // FIXME - make configurable
-    int channel = 4;
-    PowerValue.ChannelMode channelMode = PowerValue.ChannelMode.Power;
-    List<PowerValue> powervalues = pvm.get(isoFrom, isoTo, channel,
-        channelMode);
-    PowerValuePlot pvplot = new PowerValuePlot();
-    pvplot.add(powervalues);
-    File pngFile = Files
-        .createTempFile(getTempDirectory(), "powerRange", ".png").toFile();
-    pvplot.saveAsPng(pngFile, width, height);
+    File pngFile=PowerValuePlotManager.getInstance().getPlot(isoFrom, isoTo, width, height);
     rootMap.put("isoFrom", isoFrom);
     rootMap.put("isoTo", isoTo);
     rootMap.put("pngFile", pngFile.getName());
     return super.templateResponse("plot.rythm");
-  }
-
-  @GET
-  @Path("/file/{name}")
-  public Response getFile(@HeaderParam("If-Modified-Since") String modified,
-      @PathParam("name") String fileName) throws Exception {
-    File pngFile = new File(getTempDirectory().toFile(), fileName);
-    Response result = returnFile(pngFile, modified);
-    return result;
   }
 
   /**
