@@ -38,7 +38,8 @@ import com.bitplan.vzjava.jpa.VZDB;
 public class PowerValuePlotManager {
   java.nio.file.Path tmpDir = null;
   static PowerValuePlotManager instance;
-  Map<String,File> plotFileCache=new HashMap<String,File>();
+  Map<String,File> plotFileCacheBySignature=new HashMap<String,File>();
+  Map<String,File> plotFileCacheByName=new HashMap<String,File>();
   VZDB vzdb;
   
   public VZDB getVzdb() throws Exception {
@@ -94,9 +95,9 @@ public class PowerValuePlotManager {
       int height) throws Exception {
     String signature=String.format("%s-%s %4d-%4d", isoFrom,isoTo,width,height);
     // check cache
-    if (this.plotFileCache.containsKey(signature)) {
+    if (this.plotFileCacheBySignature.containsKey(signature)) {
       // if the file is in the cache
-      File plotFile=plotFileCache.get(signature);
+      File plotFile=plotFileCacheBySignature.get(signature);
       // and if it is accessible
       if (plotFile.canRead()) {
         return plotFile;
@@ -113,7 +114,18 @@ public class PowerValuePlotManager {
     File pngFile = Files
         .createTempFile(getTempDirectory(), "powerRange", ".png").toFile();
     pvplot.saveAsPng(pngFile, width, height);
-    plotFileCache.put(signature, pngFile);
+    plotFileCacheBySignature.put(signature, pngFile);
+    plotFileCacheByName.put(pngFile.getName(), pngFile);
+    return pngFile;
+  }
+
+  /**
+   * get the file with the given filename from the cache
+   * @param filename
+   * @return
+   */
+  public File getPlotFile(String filename) {
+    File pngFile=plotFileCacheByName.get(filename);
     return pngFile;
   }
 

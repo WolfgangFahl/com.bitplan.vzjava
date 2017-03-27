@@ -50,6 +50,8 @@ public class TestVZPlot {
     int height=480;
     File pngFile=pvpm.getPlot(isoFrom, isoTo, width, height);
     assertNotNull(pngFile);
+    File cacheFile=pvpm.getPlotFile(pngFile.getName());
+    assertEquals(cacheFile.getAbsolutePath(),pngFile.getAbsolutePath());
   }
 
 }

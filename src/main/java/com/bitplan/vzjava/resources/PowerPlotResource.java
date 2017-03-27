@@ -67,6 +67,17 @@ public class PowerPlotResource extends VZResource {
     Response result = returnFile(pngFile, modified);
     return result;
   }
+  
+  @GET
+  @Path("/file/{filename}") 
+  public Response getPlotFileForRange(
+      @HeaderParam("If-Modified-Since") String modified,
+      @PathParam("filename") String filename)
+          throws Exception {
+    File pngFile=PowerValuePlotManager.getInstance().getPlotFile(filename);
+    Response result = returnFile(pngFile, modified);
+    return result;
+  }
 
   @GET
   @Path("/range/{isoFrom}/{isoTo}")
