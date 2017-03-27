@@ -3,4 +3,5 @@
 @args() { String title, String comment, String tooltip; }@//args
 @header(title,tooltip,comment)
 @(DBConfigImpl.getConfigName())
+<img src='/vz/plot/range/2017-02-04 18:05/2017-02-05 04:00/plot?width=640&height=480'>
 @footer()
