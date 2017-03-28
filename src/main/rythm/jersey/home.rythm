@@ -3,9 +3,17 @@
 @import java.text.SimpleDateFormat
 @import com.bitplan.datatypes.TypeConverter
 @import com.bitplan.datatypes.DefaultTypeConverter
-@include("base.rythm")
 @import com.bitplan.vzjava.DBConfigImpl
-@args() { String title, String comment, String tooltip, String isoFrom,String isoTo; }@//args
+@import com.bitplan.vzjava.Channel
+@include("base.rythm")
+@args() { 
+  String title,
+  String tooltip,
+  String comment,
+  String isoFrom,
+  String isoTo,
+  List<Channel> channels; 
+}@//args
 @{
  String isoDateFormat="yyyy-MM-dd HH:mm";
  TypeConverter tc=new DefaultTypeConverter();
@@ -21,7 +29,13 @@
           <td><input name='isoFrom' size='14' class='datetimepicker' type='date' value='@(isoFrom)'>
           <td align='right'><label for="isoTo">bis:</label></td>
           <td><input name='isoTo' size='14' class='datetimepicker' type='date' value='@(isoTo)'>
-          <td><input type="submit" id="submit" value='plot'></td>
+          <td>
+          <select multiple name='channels'>
+          @for(Channel channel:channels) {
+             <option>@(channel.getTitle())</option>
+          }
+          </select>
+          <input type="submit" id="submit" value='plot'></td>
        </tr>
      </table>      
    </fieldset>

@@ -213,4 +213,14 @@ public class TestVZJPA {
         "database should have more than 74400 of imported records but has %5d",
         dbPowerValues.size()), dbPowerValues.size() > 74400);
   }
+  
+  @Test
+  public void testChannels() throws Exception {
+    Channel.vzdb=getDemoVZ();
+    List<Channel> channels = Channel.getChannels();
+    assertEquals(7,channels.size());
+    for (Channel channel:channels) {
+      assertNotNull(channel.getTitle());
+    }
+  }
 }

@@ -20,7 +20,11 @@
  */
 package com.bitplan.vzjava.resources;
 
+import java.util.List;
+import java.util.logging.Level;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,6 +32,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+
+import com.bitplan.vzjava.Channel;
 
 /**
  * Jersey Resource for Home
@@ -46,21 +52,34 @@ public class HomeResource extends VZResource {
   }
 
   @GET
-  public Response showHome() {
+  public Response showHome() throws Exception {
     // FIXME - allow modification
-    isoFrom="2017-02-04 18:05";
-    isoTo="2017-02-05 04:00";
-    rootMap.put("isoFrom",isoFrom);
+    isoFrom = "2017-02-04 18:05";
+    isoTo = "2017-02-05 04:00";
+    rootMap.put("isoFrom", isoFrom);
     rootMap.put("isoTo", isoTo);
-    Response response = super.templateResponse("home.rythm");
-    return response;
+    return channelPlotResponse();
   }
-  
+
   @POST
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces({ "text/html" })
-  public Response homePost(MultivaluedMap<String, String> formParams) {
+  public Response homePost(MultivaluedMap<String, String> formParams,
+      @FormParam("channels") List<String> channels) throws Exception {
+    debug = true;
+    LOGGER.log(Level.INFO,"selected "+channels.size()+" channels");
     super.formToMap(formParams);
+    return channelPlotResponse();
+  }
+
+  /**
+   * generic channel Plot response
+   * 
+   * @return - the response for showing channels
+   * @throws Exception
+   */
+  public Response channelPlotResponse() throws Exception {
+    rootMap.put("channels", Channel.getChannels());
     Response response = super.templateResponse("home.rythm");
     return response;
   }
