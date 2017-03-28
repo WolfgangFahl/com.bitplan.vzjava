@@ -10,9 +10,9 @@
 	<description>Java Frontend für Volkszähler</description>
 	<url>https://github.com/WolfgangFahl/com.bitplan.vzjava</url>
 	<properties>
-	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
 	<licenses>
 		<license>
 			<name>Apache 2.0 license</name>
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>com.bitplan.rest</groupId>
 			<artifactId>com.bitplan.simplerest</artifactId>
-			<version>0.0.8</version>
+			<version>0.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bitplan.rest</groupId>
@@ -50,7 +50,7 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-		<!--  Drivers according to http://wiki.volkszaehler.org/software/middleware/installation -->
+		<!-- Drivers according to http://wiki.volkszaehler.org/software/middleware/installation -->
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -75,6 +75,12 @@
 			<artifactId>jfreechart</artifactId>
 			<version>1.0.19</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/ar.com.hjg/pngj -->
+		<dependency>
+			<groupId>ar.com.hjg</groupId>
+			<artifactId>pngj</artifactId>
+			<version>2.1.0</version>
+		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 
 			for linear regressions -->
 		<dependency>
@@ -94,17 +100,17 @@
 					<target />
 				</configuration>
 			</plugin>
-			<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->		
+			<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.19.1</version>
 				<configuration>
-				  <includes>
-				    <include>**/*Test*.java</include>
-				  </includes>
+					<includes>
+						<include>**/*Test*.java</include>
+					</includes>
 					<excludes>
-						<exclude>**/*TestSuite.java</exclude> 
+						<exclude>**/*TestSuite.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>

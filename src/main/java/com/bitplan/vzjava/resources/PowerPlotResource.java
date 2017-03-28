@@ -63,9 +63,10 @@ public class PowerPlotResource extends VZResource {
       @HeaderParam("If-Modified-Since") String modified,
       @QueryParam("width") @DefaultValue("1024") int width,
       @QueryParam("height") @DefaultValue("768") int height,
+      @QueryParam("channelnos") String channelNos,
       @PathParam("isoFrom") String isoFrom, @PathParam("isoTo") String isoTo)
           throws Exception {
-    File pngFile=PowerValuePlotManager.getInstance().getPlot(isoFrom, isoTo, width, height);
+    File pngFile=PowerValuePlotManager.getInstance().getPlot(channelNos,isoFrom, isoTo, width, height);
     Response result = returnFile(pngFile, modified);
     return result;
   }
@@ -86,9 +87,10 @@ public class PowerPlotResource extends VZResource {
   public Response getPlotForRange(
       @QueryParam("width") @DefaultValue("1024") int width,
       @QueryParam("height") @DefaultValue("768") int height,
+      @QueryParam("channelnos") String channelNos,
       @PathParam("isoFrom") String isoFrom, @PathParam("isoTo") String isoTo)
           throws Exception {
-    File pngFile=PowerValuePlotManager.getInstance().getPlot(isoFrom, isoTo, width, height);
+    File pngFile=PowerValuePlotManager.getInstance().getPlot(channelNos,isoFrom, isoTo, width, height);
     rootMap.put("isoFrom", isoFrom);
     rootMap.put("isoTo", isoTo);
     rootMap.put("pngFile", pngFile.getName());

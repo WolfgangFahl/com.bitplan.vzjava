@@ -12,11 +12,15 @@
   String comment,
   String isoFrom,
   String isoTo,
-  List<Channel> channels; 
+  String channels,
+  List<Channel> available_channels; 
 }@//args
 @{
  String isoDateFormat="yyyy-MM-dd HH:mm";
  TypeConverter tc=new DefaultTypeConverter();
+ List<String> selectedChannels=Arrays.asList(channels.split(";"));
+ String channelNos="";
+ String delim="";
 }
 @header(title,tooltip,comment)
 @(DBConfigImpl.getConfigName())
@@ -31,8 +35,14 @@
           <td><input name='isoTo' size='14' class='datetimepicker' type='date' value='@(isoTo)'>
           <td>
           <select multiple name='channels'>
-          @for(Channel channel:channels) {
-             <option>@(channel.getTitle())</option>
+          @for(Channel channel:available_channels) {
+             <option @if(selectedChannels.contains(channel.getTitle())){ selected }>@(channel.getTitle())</option>
+             @if(selectedChannels.contains(channel.getTitle())) {
+               @{ 
+                 channelNos+=delim+channel.getNo();
+                 delim=";";
+               }
+             }
           }
           </select>
           <input type="submit" id="submit" value='plot'></td>
@@ -41,5 +51,5 @@
    </fieldset>
    
 </form>				
-<img src='/vz/plot/range/@(isoFrom)/@(isoTo)/plot?width=640&height=480'>
+<img src='/vz/plot/range/@(isoFrom)/@(isoTo)/plot?channelnos=@(channelNos)&width=640&height=480'>
 @footer()

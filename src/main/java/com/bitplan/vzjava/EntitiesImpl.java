@@ -32,66 +32,34 @@ public class EntitiesImpl implements Entities {
   String type;
   String eclass;
 
-  /* (non-Javadoc)
-   * @see com.bitplan.vzjava.Entities#getId()
-   */
-  @Override
   public int getId() {
     return id;
   }
 
-  /* (non-Javadoc)
-   * @see com.bitplan.vzjava.Entities#setId(int)
-   */
-  @Override
   public void setId(int id) {
     this.id = id;
   }
 
-  /* (non-Javadoc)
-   * @see com.bitplan.vzjava.Entities#getUuid()
-   */
-  @Override
   public String getUuid() {
     return uuid;
   }
 
-  /* (non-Javadoc)
-   * @see com.bitplan.vzjava.Entities#setUuid(java.lang.String)
-   */
-  @Override
   public void setUuid(String uuid) {
     this.uuid = uuid;
   }
 
-  /* (non-Javadoc)
-   * @see com.bitplan.vzjava.Entities#getType()
-   */
-  @Override
   public String getType() {
     return type;
   }
 
-  /* (non-Javadoc)
-   * @see com.bitplan.vzjava.Entities#setType(java.lang.String)
-   */
-  @Override
   public void setType(String type) {
     this.type = type;
   }
 
-  /* (non-Javadoc)
-   * @see com.bitplan.vzjava.Entities#getEclass()
-   */
-  @Override
   public String getEclass() {
     return eclass;
   }
 
-  /* (non-Javadoc)
-   * @see com.bitplan.vzjava.Entities#setEclass(java.lang.String)
-   */
-  @Override
   public void setEclass(String eclass) {
     this.eclass = eclass;
   }

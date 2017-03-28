@@ -32,49 +32,75 @@ import com.bitplan.vzjava.jpa.VZDB;
 /**
  * domain logical access to channels
  * hides the technical details of properties and entities
+ * 
  * @author wf
  *
  */
 public class Channel {
   protected static VZDB vzdb;
-  
-  protected static Map<String,Channel> channelsByTitle=new HashMap<String,Channel>();
+
+  protected static Map<String, Channel> channelsByTitle = new HashMap<String, Channel>();
+  Map<String, Properties> properties = new HashMap<String, Properties>();
   Entities entity;
-  Map<String,Properties> properties=new HashMap<String,Properties>();
+  
+  int no;
+
+  public int getNo() {
+    return no;
+  }
+
+  public void setNo(int no) {
+    this.no = no;
+  }
 
   /**
    * get the available channels of the system
+   * 
    * @return - the list of channels
    * @throws Exception
    */
   public static List<Channel> getChannels() throws Exception {
-    List<Channel> channels=new ArrayList<Channel>();
-    if (vzdb==null)
-      vzdb=new VZDB();
-    PropertiesManagerDao pm=new PropertiesManagerDao();
+    List<Channel> channels = new ArrayList<Channel>();
+    if (vzdb == null)
+      vzdb = new VZDB();
+    PropertiesManagerDao pm = new PropertiesManagerDao();
     List<Properties> allproperties = pm.getProperties(vzdb);
-    EntitiesManagerDao em=new EntitiesManagerDao();
-    for (Entities entity:em.getEntities(vzdb)) {
-      Channel channel=new Channel();
-      channel.entity=entity;
-      for (Properties property:allproperties) {
-        if (property.getEntity_id()==entity.getId()) {
+    EntitiesManagerDao em = new EntitiesManagerDao();
+    int index=0;
+    for (Entities entity : em.getEntities(vzdb)) {
+      Channel channel = new Channel();
+      channel.entity = entity;
+      for (Properties property : allproperties) {
+        if (property.getEntity_id() == entity.getId()) {
           channel.properties.put(property.getPkey(), property);
         }
       }
-      channels.add(channel);
-      channelsByTitle.put(channel.getTitle(),channel);
+      if ("channel".equals(entity.getEclass())) {
+        channel.setNo(++index);
+        channels.add(channel);
+        channelsByTitle.put(channel.getTitle(), channel);
+      }
     }
     return channels;
-    
+
   }
 
   /**
    * get the title of the channel
+   * 
    * @return the title
    */
   public String getTitle() {
-    String name=properties.get("title").getValue();
+    String name = properties.get("title").getValue();
     return name;
+  }
+  
+  /**
+   * get the description of the channel
+   * @return
+   */
+  public String getDescription() {
+    String description = properties.get("description").getValue();
+    return description;
   }
 }

@@ -38,13 +38,13 @@ import com.bitplan.vzjava.jpa.VZDB;
 public class PowerValuePlotManager {
   java.nio.file.Path tmpDir = null;
   static PowerValuePlotManager instance;
-  Map<String,File> plotFileCacheBySignature=new HashMap<String,File>();
-  Map<String,File> plotFileCacheByName=new HashMap<String,File>();
+  Map<String, File> plotFileCacheBySignature = new HashMap<String, File>();
+  Map<String, File> plotFileCacheByName = new HashMap<String, File>();
   VZDB vzdb;
-  
+
   public VZDB getVzdb() throws Exception {
-    if (vzdb==null)
-      vzdb=new VZDB();
+    if (vzdb == null)
+      vzdb = new VZDB();
     return vzdb;
   }
 
@@ -56,16 +56,17 @@ public class PowerValuePlotManager {
    * private constructor to force instance handling
    */
   protected PowerValuePlotManager() {
-   
+
   }
-  
+
   /**
    * singleton access
+   * 
    * @return my instance
    */
   public static PowerValuePlotManager getInstance() {
-    if (instance==null) {
-      instance=new PowerValuePlotManager();
+    if (instance == null) {
+      instance = new PowerValuePlotManager();
     }
     return instance;
   }
@@ -85,32 +86,37 @@ public class PowerValuePlotManager {
   /**
    * get the plot File
    * 
+   * @param channelNos
    * @param isoFrom
    * @param isoTo
    * @param width
    * @param height
    * @throws Exception
    */
-  public File getPlot(String isoFrom, String isoTo, int width,
-      int height) throws Exception {
-    String signature=String.format("%s-%s %4d-%4d", isoFrom,isoTo,width,height);
+  public File getPlot(String channelNos, String isoFrom, String isoTo,
+      int width, int height) throws Exception {
+    String signature = String.format("%s %s-%s %4d-%4d", channelNos, isoFrom,
+        isoTo, width, height);
     // check cache
     if (this.plotFileCacheBySignature.containsKey(signature)) {
       // if the file is in the cache
-      File plotFile=plotFileCacheBySignature.get(signature);
+      File plotFile = plotFileCacheBySignature.get(signature);
       // and if it is accessible
       if (plotFile.canRead()) {
         return plotFile;
       }
     }
-    PowerValueManagerDao pvm = PowerValueManagerDao.getVZInstance(this.getVzdb());
-    // FIXME - make configurable
-    int channel = 4;
-    PowerValue.ChannelMode channelMode = PowerValue.ChannelMode.Power;
-    List<PowerValue> powervalues = pvm.get(isoFrom, isoTo, channel,
-        channelMode);
     PowerValuePlot pvplot = new PowerValuePlot();
-    pvplot.add(powervalues);
+    PowerValueManagerDao pvm = PowerValueManagerDao
+        .getVZInstance(this.getVzdb());
+    for (String channelNo : channelNos.split(";")) {
+      // FIXME - get from Channel Info
+      PowerValue.ChannelMode channelMode = PowerValue.ChannelMode.Power;
+      List<PowerValue> powervalues = pvm.get(isoFrom, isoTo,
+          Integer.parseInt(channelNo), channelMode);
+      // FIXME add title
+      pvplot.add(powervalues);
+    }
     File pngFile = Files
         .createTempFile(getTempDirectory(), "powerRange", ".png").toFile();
     pvplot.saveAsPng(pngFile, width, height);
@@ -121,11 +127,12 @@ public class PowerValuePlotManager {
 
   /**
    * get the file with the given filename from the cache
+   * 
    * @param filename
    * @return
    */
   public File getPlotFile(String filename) {
-    File pngFile=plotFileCacheByName.get(filename);
+    File pngFile = plotFileCacheByName.get(filename);
     return pngFile;
   }
 

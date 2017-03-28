@@ -28,6 +28,8 @@ import org.junit.Test;
 
 import com.bitplan.vzjava.jpa.VZDB;
 
+import ar.com.hjg.pngj.PngReader;
+
 /**
  * test the Plot handling
  * @author wf
@@ -48,10 +50,14 @@ public class TestVZPlot {
     String isoTo="2017-02-05 04:00";
     int width=640;
     int height=480;
-    File pngFile=pvpm.getPlot(isoFrom, isoTo, width, height);
+    File pngFile=pvpm.getPlot("4",isoFrom, isoTo, width, height);
     assertNotNull(pngFile);
     File cacheFile=pvpm.getPlotFile(pngFile.getName());
     assertEquals(cacheFile.getAbsolutePath(),pngFile.getAbsolutePath());
+    PngReader pngr=new PngReader(cacheFile);
+    assertEquals(width,pngr.imgInfo.cols);
+    assertEquals(height,pngr.imgInfo.rows);
+    pngr.close();
   }
 
 }
