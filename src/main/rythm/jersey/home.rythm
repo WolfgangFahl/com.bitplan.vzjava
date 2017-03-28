@@ -1,7 +1,31 @@
+@// Rythm template for the Volkzähler Java Frontend Home
+@// see http://rythmengine.org/ for the syntax of this template
+@import java.text.SimpleDateFormat
+@import com.bitplan.datatypes.TypeConverter
+@import com.bitplan.datatypes.DefaultTypeConverter
 @include("base.rythm")
 @import com.bitplan.vzjava.DBConfigImpl
-@args() { String title, String comment, String tooltip; }@//args
+@args() { String title, String comment, String tooltip, String isoFrom,String isoTo; }@//args
+@{
+ String isoDateFormat="yyyy-MM-dd HH:mm";
+ TypeConverter tc=new DefaultTypeConverter();
+}
 @header(title,tooltip,comment)
 @(DBConfigImpl.getConfigName())
-<img src='/vz/plot/range/2017-02-04 18:05/2017-02-05 04:00/plot?width=640&height=480'>
+<form method='POST'>
+   <fieldset>
+     <legend><i class='mdi mdi-calendar'></i>Zeitraum</legend>
+     <table>
+       <tr>
+          <td align='right'><label for="isoFrom">von:</label></td>
+          <td><input name='isoFrom' size='14' class='datetimepicker' type='date' value='@(isoFrom)'>
+          <td align='right'><label for="isoTo">bis:</label></td>
+          <td><input name='isoTo' size='14' class='datetimepicker' type='date' value='@(isoTo)'>
+          <td><input type="submit" id="submit" value='plot'></td>
+       </tr>
+     </table>      
+   </fieldset>
+   
+</form>				
+<img src='/vz/plot/range/@(isoFrom)/@(isoTo)/plot?width=640&height=480'>
 @footer()

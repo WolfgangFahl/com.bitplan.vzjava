@@ -20,8 +20,13 @@
  */
 package com.bitplan.vzjava.resources;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 /**
@@ -30,6 +35,8 @@ import javax.ws.rs.core.Response;
 @SuppressWarnings("rawtypes")
 @Path("/home")
 public class HomeResource extends VZResource {
+  String isoFrom;
+  String isoTo;
 
   /**
    * constructor
@@ -40,6 +47,20 @@ public class HomeResource extends VZResource {
 
   @GET
   public Response showHome() {
+    // FIXME - allow modification
+    isoFrom="2017-02-04 18:05";
+    isoTo="2017-02-05 04:00";
+    rootMap.put("isoFrom",isoFrom);
+    rootMap.put("isoTo", isoTo);
+    Response response = super.templateResponse("home.rythm");
+    return response;
+  }
+  
+  @POST
+  @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+  @Produces({ "text/html" })
+  public Response homePost(MultivaluedMap<String, String> formParams) {
+    super.formToMap(formParams);
     Response response = super.templateResponse("home.rythm");
     return response;
   }
