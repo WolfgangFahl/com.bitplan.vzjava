@@ -35,6 +35,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import com.bitplan.vzjava.PowerValue.ChannelMode;
+import com.bitplan.vzjava.jpa.EntitiesManagerDao;
 import com.bitplan.vzjava.jpa.PowerValueManagerDao;
 import com.bitplan.vzjava.jpa.PropertiesManagerDao;
 import com.bitplan.vzjava.jpa.VZDB;
@@ -51,6 +52,19 @@ public class TestVZJPA {
   private static PropertiesManagerDao pm;
   private static List<Properties> props;
   boolean debug = false;
+  static VZDB vzdb;
+
+  /**
+   * get the demo VZDB
+   * @return
+   * @throws Exception
+   */
+  public static VZDB getDemoVZ() throws Exception {
+    if (vzdb == null) {
+      vzdb = new VZDB("demo");
+    }
+    return vzdb;
+  }
 
   /**
    * get the properties ManagerDao
@@ -72,7 +86,7 @@ public class TestVZJPA {
   public static List<Properties> getProperties() throws Exception {
     if (props == null) {
       PropertiesManagerDao lpm = getPropertiesManager();
-      props = lpm.getProperties(new VZDB("demo"));
+      props = lpm.getProperties(getDemoVZ());
     }
     return props;
   }
@@ -92,6 +106,13 @@ public class TestVZJPA {
     }
     // the number of properties in the test database is exactly 56
     assertEquals(56, props.size());
+  }
+
+  @Test
+  public void testGetEntities() throws Exception {
+    EntitiesManagerDao em = new EntitiesManagerDao();
+    List<Entities> entities = em.getEntities(getDemoVZ());
+    assertEquals(7,entities.size());
   }
 
   /***
@@ -146,7 +167,7 @@ public class TestVZJPA {
       dbConfig.testConnection();
       fail("invalid Driver should throw an exception");
     } catch (ClassNotFoundException cfe) {
-      assertEquals("invalid Driver",cfe.getMessage());
+      assertEquals("invalid Driver", cfe.getMessage());
     }
   }
 
@@ -187,9 +208,9 @@ public class TestVZJPA {
     int channel = 4;
     ChannelMode channelMode = ChannelMode.Power;
     pvm.setVzdb(vzdb);
-    List<PowerValue> dbPowerValues = pvm.get(from, to, channel,
-        channelMode);
-    assertTrue(String.format("database should have more than 74400 of imported records but has %5d", dbPowerValues.size()),
-        dbPowerValues.size()>74400);
+    List<PowerValue> dbPowerValues = pvm.get(from, to, channel, channelMode);
+    assertTrue(String.format(
+        "database should have more than 74400 of imported records but has %5d",
+        dbPowerValues.size()), dbPowerValues.size() > 74400);
   }
 }
