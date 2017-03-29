@@ -22,6 +22,8 @@ package com.bitplan.vzjava;
 
 import static org.junit.Assert.*;
 
+import java.awt.Color;
+import java.awt.Paint;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
@@ -189,7 +191,7 @@ public class TestVZJPA {
         .getFactoryStatic().fromXML(xml);
     List<PowerValue> powerValues = pvm.getElements();
     // there should be 74669 power values in this test set
-    assertEquals("xml import should have # of records", 74669,
+    assertEquals("xml import should have new Color(0x of records", 74669,
         powerValues.size());
     // delete existing data from the test database
     EntityManager em = vzdb.getEntityManager();
@@ -216,11 +218,21 @@ public class TestVZJPA {
   
   @Test
   public void testChannels() throws Exception {
+    Paint[] expected={new Color(0xcc,0x00,0x00),
+        new Color(0xFF,0x80,0x00),
+        new Color(0x00,0x00,0x99),
+        new Color(0x00,0x00,0x00),
+        new Color(0x99,0x33,0x00),
+        new Color(0x00,0xFF,0x00),
+        new Color(0x00,0x99,0x99)};
     Channel.vzdb=getDemoVZ();
+    int index=0;
     List<Channel> channels = Channel.getChannels();
     assertEquals(7,channels.size());
     for (Channel channel:channels) {
       assertNotNull(channel.getTitle());
+      assertEquals("color "+index,expected[index],channel.getColor());
+      index++;
     }
   }
 }

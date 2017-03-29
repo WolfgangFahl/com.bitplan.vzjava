@@ -37,7 +37,11 @@ import org.jfree.data.time.TimeSeriesCollection;
  *
  */
 public class PowerValuePlot extends Plot {
-  List<List<PowerValue>> curves = new ArrayList<List<PowerValue>>();
+  public static class Curve {
+    Channel channel;
+    List<PowerValue> powerValues;
+  }
+  List<Curve> curves = new ArrayList<Curve>();
 
   @SuppressWarnings("deprecation")
   @Override
@@ -45,28 +49,34 @@ public class PowerValuePlot extends Plot {
     ColoredDataSet result = new ColoredDataSet();
     final TimeSeriesCollection dataset = new TimeSeriesCollection();
     dataset.setDomainIsPointsInTime(true);
-    for (List<PowerValue> curve : curves) {
-      final TimeSeries series = new TimeSeries("power", Minute.class);
-      for (PowerValue powerValue : curve) {
+    Paint[] colors =new Paint[curves.size()];
+    int index=0;
+    for (Curve curve : curves) {
+      colors[index]=curve.channel.getColor();
+      final TimeSeries series = new TimeSeries(curve.channel.getTitle(), Minute.class);
+      for (PowerValue powerValue : curve.powerValues) {
         Date ts = powerValue.getTimeStamp();
         Minute min = new Minute(ts);
         series.addOrUpdate(min, powerValue.getValue());
       }
       dataset.addSeries(series);
+      index++;
     }
     result.dataSet = dataset;
-    Paint[] colors = { Color.blue, new Color(0xff, 0x80, 00) };
     result.paintSequence = colors;
     return result;
   }
 
   /**
    * add the given List of PowerValues
-   * 
+   * @param channel - the channel to add
    * @param powervalues
    */
-  public void add(List<PowerValue> powervalues) {
-    curves.add(powervalues);
+  public void add(Channel channel, List<PowerValue> powervalues) {
+    Curve curve=new Curve();
+    curve.channel=channel;
+    curve.powerValues=powervalues;
+    curves.add(curve);
   }
 
 }

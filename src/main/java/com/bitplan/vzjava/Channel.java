@@ -20,11 +20,16 @@
  */
 package com.bitplan.vzjava;
 
+import java.awt.Color;
+import java.awt.Paint;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import com.bitplan.vzjava.PowerValue.ChannelMode;
 import com.bitplan.vzjava.jpa.EntitiesManagerDao;
 import com.bitplan.vzjava.jpa.PropertiesManagerDao;
 import com.bitplan.vzjava.jpa.VZDB;
@@ -38,7 +43,8 @@ import com.bitplan.vzjava.jpa.VZDB;
  */
 public class Channel {
   protected static VZDB vzdb;
-
+  protected static Logger LOGGER = Logger.getLogger("com.bitplan.vzjava");
+  
   protected static Map<String, Channel> channelsByTitle = new HashMap<String, Channel>();
   Map<String, Properties> properties = new HashMap<String, Properties>();
   Entities entity;
@@ -82,7 +88,6 @@ public class Channel {
       }
     }
     return channels;
-
   }
 
   /**
@@ -102,5 +107,33 @@ public class Channel {
   public String getDescription() {
     String description = properties.get("description").getValue();
     return description;
+  }
+  
+  /**
+   * get the channel mode of this channel
+   * @return
+   */
+  public PowerValue.ChannelMode getChannelMode() {
+    if ("powersensor".equals(this.entity.getType())) {
+      return ChannelMode.Power;
+    } else  if ("electric meter".equals(this.entity.getType())) {
+      return ChannelMode.Counter;
+    } else {
+      LOGGER.log(Level.WARNING,"unknown entity type "+entity.getType()+" assuming counter");
+      return ChannelMode.Counter;
+    }
+  }
+
+  /**
+   * get the color for this channel
+   * @return
+   */
+  public Paint getColor() {
+    String colorString=properties.get("color").getValue();
+    int r=Integer.parseInt(colorString.substring(1,3), 16); 
+    int g=Integer.parseInt(colorString.substring(3,5), 16); 
+    int b=Integer.parseInt(colorString.substring(5,7), 16);
+    Paint color=new Color(r,g,b);
+    return color;
   }
 }
