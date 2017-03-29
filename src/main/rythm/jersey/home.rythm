@@ -13,6 +13,8 @@
   String isoFrom,
   String isoTo,
   String channels,
+  String width,
+  String height,
   List<Channel> available_channels; 
 }@//args
 @{
@@ -45,11 +47,12 @@
              }
           }
           </select>
+          <td><input type='text' name='width' size='4' value='@(width)'></input>x<input type='text' name='height' size='4' value='@(height)'></input>
           <input type="submit" id="submit" value='plot'></td>
        </tr>
      </table>      
    </fieldset>
    
 </form>				
-<img src='/vz/plot/range/@(isoFrom)/@(isoTo)/plot?channelnos=@(channelNos)&width=640&height=480'>
+<img width='100%' height='70%' src='/vz/plot/range/@(isoFrom)/@(isoTo)/plot?channelnos=@(channelNos)&width=@(width)&height=@(height)'>
 @footer()

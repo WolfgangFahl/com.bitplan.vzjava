@@ -1,6 +1,9 @@
 @include("base.rythm")
 @args() { String title, String comment, String tooltip; }@//args
 @header(title,tooltip,comment)
+<h3>Documentation</h3>
+<a href='http://vz.bitplan.com/index.php/Vzjava'>vzjava ProfiWiki</a>
+
 <h3>&nbsp;Links</h3>
  <ul>
    <li><a href='https://github.com/WolfgangFahl/com.bitplan.vzjava'>Java Frontend für Volkszähler</a>

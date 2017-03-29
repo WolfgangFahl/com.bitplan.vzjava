@@ -40,6 +40,8 @@ public class HomeResource extends VZResource {
   String isoFrom;
   String isoTo;
   String channels;
+  String width;
+  String height;
 
   /**
    * constructor
@@ -57,6 +59,8 @@ public class HomeResource extends VZResource {
     rootMap.put("channels", channels);
     rootMap.put("isoFrom", isoFrom);
     rootMap.put("isoTo", isoTo);
+    rootMap.put("width","1920");
+    rootMap.put("height","1080");
     return channelPlotResponse();
   }
 
@@ -64,7 +68,6 @@ public class HomeResource extends VZResource {
   @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
   @Produces({ "text/html" })
   public Response homePost(MultivaluedMap<String, String> formParams) throws Exception {
-    debug=true;
     super.formToMap(formParams);
     return channelPlotResponse();
   }
