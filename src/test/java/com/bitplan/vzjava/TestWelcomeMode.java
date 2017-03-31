@@ -20,16 +20,28 @@
  */
 package com.bitplan.vzjava;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+import com.bitplan.vzjava.AppMode.Mode;
 
 /**
- * TestSuite for VZ Java project
+ * test the Welcome mode
  * @author wf
  *
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({ TestWelcomeMode.class,TestVZJPA.class, TestVZPlot.class, TestVZRestFul.class})
-public class TestSuite {
+public class TestWelcomeMode {
   
+  /**
+   * https://github.com/WolfgangFahl/com.bitplan.vzjava/issues/9
+   * @throws Exception 
+   */
+  @Test
+  public void testWelcomeMode() throws Exception {
+    AppMode.setMode(Mode.Welcome);
+    assertEquals(Mode.Welcome,AppMode.getMode());
+    AppMode.setMode(Mode.Demo);
+    assertEquals(Mode.Demo,AppMode.getMode());
+  }
 }

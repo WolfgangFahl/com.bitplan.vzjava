@@ -3,7 +3,9 @@
 @header(title,tooltip,comment)
 <h3>Documentation</h3>
 <a href='http://vz.bitplan.com/index.php/Vzjava'>vzjava ProfiWiki</a>
-
+<h3>Einstellungen</h3>
+Über das Menü-Symbol <a href='/vz/dbconfig' title='Einstellungen'><i class='mdi mdi-settings'></i><!-- config --></a>
+können die Einstellungen verändert werden.
 <h3>&nbsp;Links</h3>
  <ul>
    <li><a href='https://github.com/WolfgangFahl/com.bitplan.vzjava'>Java Frontend für Volkszähler</a>

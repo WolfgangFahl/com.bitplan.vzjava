@@ -9,3 +9,4 @@ buildNumber.properties
 .mvn/timing.properties
 .settings
 /bin/
+src/test/data/vzdb/vztest.db
