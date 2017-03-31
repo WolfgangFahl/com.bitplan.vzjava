@@ -36,6 +36,7 @@ import javax.persistence.Query;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
+import com.bitplan.vzjava.AppMode.Mode;
 import com.bitplan.vzjava.PowerValue.ChannelMode;
 import com.bitplan.vzjava.jpa.EntitiesManagerDao;
 import com.bitplan.vzjava.jpa.PowerValueManagerDao;
@@ -63,6 +64,7 @@ public class TestVZJPA {
    */
   public static VZDB getDemoVZ() throws Exception {
     if (vzdb == null) {
+      AppMode.setMode(Mode.Demo);
       vzdb = new VZDB("demo");
     }
     return vzdb;
