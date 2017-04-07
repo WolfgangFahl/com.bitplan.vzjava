@@ -80,7 +80,7 @@ public class HomeResource extends VZResource {
    */
   public Response channelPlotResponse() throws Exception {
     rootMap.put("available_channels", Channel.getChannels());
-    Response response = super.templateResponse("home.rythm");
+    Response response = super.templateResponse("vzhome.rythm");
     return response;
   }
 
