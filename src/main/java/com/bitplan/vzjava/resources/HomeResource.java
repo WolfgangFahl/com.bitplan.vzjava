@@ -35,7 +35,7 @@ import com.bitplan.vzjava.Channel;
  * Jersey Resource for Home
  */
 @SuppressWarnings("rawtypes")
-@Path("/home")
+@Path("/vzhome")
 public class HomeResource extends VZResource {
   String isoFrom;
   String isoTo;
