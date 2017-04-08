@@ -110,11 +110,14 @@ public class PowerValuePlotManager {
     PowerValueManagerDao pvm = PowerValueManagerDao
         .getVZInstance(this.getVzdb());
     List<Channel> channels = Channel.getChannels();
-    for (String channelNo : channelNos.split(";")) {
-      int channelNumber=Integer.parseInt(channelNo);
-      Channel channel=channels.get(channelNumber-1);
-      List<PowerValue> powervalues = pvm.get(isoFrom, isoTo,channelNumber,channel.getChannelMode());
-      pvplot.add(channel,powervalues);
+    if (channelNos != null) {
+      for (String channelNo : channelNos.split(";")) {
+        int channelNumber = Integer.parseInt(channelNo);
+        Channel channel = channels.get(channelNumber - 1);
+        List<PowerValue> powervalues = pvm.get(isoFrom, isoTo, channelNumber,
+            channel.getChannelMode());
+        pvplot.add(channel, powervalues);
+      }
     }
     File pngFile = Files
         .createTempFile(getTempDirectory(), "powerRange", ".png").toFile();
