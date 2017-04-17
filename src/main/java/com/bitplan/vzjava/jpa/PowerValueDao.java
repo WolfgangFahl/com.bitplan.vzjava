@@ -25,6 +25,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -34,7 +35,10 @@ import com.bitplan.vzjava.PowerValueImpl;
 
 @Entity(name = "Data")
 @Table(name = "Data")
-@NamedNativeQuery(name="Data.period", query="SELECT * FROM Data d where d.channel_id=?1 and d.timestamp>=?2 and d.timestamp<=?3", resultClass=PowerValueDao.class)
+@NamedNativeQueries( {
+@NamedNativeQuery(name="Data.period", query="SELECT * FROM Data d where d.channel_id=?1 and d.timestamp>=?2 and d.timestamp<=?3", resultClass=PowerValueDao.class),
+@NamedNativeQuery(name="Data.current",query="SELECT * FROM Data d where d.channel_id=?1 order by timestamp desc",resultClass=PowerValueDao.class)
+})
 // timestamp between :from and :to
 public class PowerValueDao extends PowerValueImpl {
   int id;

@@ -195,6 +195,21 @@ public class PowerValueManagerDao extends
     }
     return chargeValues;
   }
+  
+  /**
+   * get the current PowerValue for the given channel
+   * @param channel
+   * @return the PowerValue
+   */
+  public PowerValue getCurrent(int channel) {
+    @SuppressWarnings("unchecked")
+    TypedQuery<PowerValueDao> query = (TypedQuery<PowerValueDao>) vzdb
+        .getEntityManager().createNamedQuery("Data.current");
+    query.setParameter(1, channel);
+    query.setMaxResults(1);
+    PowerValueDao powerValue = query.getSingleResult();
+    return powerValue;
+  }
 
   /**
    * get PowerValues from the two calendar instances
