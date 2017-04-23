@@ -20,6 +20,8 @@
  */
 package com.bitplan.vzjava;
 
+import java.util.List;
+
 /**
  * access to entities
  * @author wf
@@ -42,5 +44,7 @@ public interface Entities {
   String getEclass();
 
   void setEclass(String eclass);
+
+  List<Properties> getProperties();
 
 }

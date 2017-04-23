@@ -102,11 +102,12 @@ public class TestVZJPA {
    */
   @Test
   public void testGetProperties() throws Exception {
+    //debug=true;
     props = getProperties();
     for (Properties prop : props) {
       if (debug)
         System.out.println(String.format("%3d %3d %s=%s", prop.getId(),
-            prop.getEntity_id(), prop.getPkey(), prop.getValue()));
+            prop.getEntity().getId(), prop.getPkey(), prop.getValue()));
     }
     // the number of properties in the test database is exactly 56
     assertEquals(56, props.size());
@@ -117,6 +118,9 @@ public class TestVZJPA {
     EntitiesManagerDao em = new EntitiesManagerDao();
     List<Entities> entities = em.getEntities(getDemoVZ());
     assertEquals(7,entities.size());
+    for (Entities entity:entities) {
+      assertTrue("excpected >=6 properties but found "+entity.getProperties().size(),entity.getProperties().size()>=6);
+    }
   }
 
   /***
@@ -126,16 +130,20 @@ public class TestVZJPA {
    */
   @Test
   public void testAsXml() throws Exception {
+    //debug=true;
     props = getProperties();
     String xml = getPropertiesManager().asXML();
     if (debug) {
       System.out.println(xml);
     }
-    assertTrue(xml.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        + "<propertiesManager>\n" + "   <properties>\n" + "      <property>\n"
-        + "         <entity_id>1</entity_id>\n" + "         <id>1</id>\n"
-        + "         <pkey>title</pkey>\n"
-        + "         <value>Haus 1.8.0 EVU Bezug</value>"));
+    assertTrue(xml.startsWith("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+        "<propertiesManager>\n" + 
+        "   <properties>\n" + 
+        "      <property>\n" + 
+        "         <id>1</id>\n" + 
+        "         <pkey>title</pkey>\n" + 
+        "         <value>Haus 1.8.0 EVU Bezug</value>\n" + 
+        "      </property>"));
   }
 
   @Test

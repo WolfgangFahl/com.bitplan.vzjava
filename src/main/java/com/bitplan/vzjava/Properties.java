@@ -20,6 +20,8 @@
  */
 package com.bitplan.vzjava;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * interface for properties
  * @author wf
@@ -31,9 +33,10 @@ public interface Properties {
 
 	void setId(int id);
 
-	int getEntity_id();
+  @XmlTransient
+	Entities getEntity();
 
-	void setEntity_id(int entity_id);
+	void setEntity(Entities entity);
 
 	String getPkey();
 

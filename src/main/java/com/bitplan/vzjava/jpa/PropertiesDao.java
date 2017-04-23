@@ -21,13 +21,18 @@
 package com.bitplan.vzjava.jpa;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.bitplan.jaxb.JaxbFactory;
 import com.bitplan.jaxb.JaxbFactoryApi;
 import com.bitplan.jaxb.JaxbPersistenceApi;
+import com.bitplan.vzjava.Entities;
 import com.bitplan.vzjava.Properties;
 import com.bitplan.vzjava.PropertiesImpl;
 
@@ -39,48 +44,57 @@ import com.bitplan.vzjava.PropertiesImpl;
  */
 @Entity(name = "Properties")
 @Table(name = "Properties")
-public class PropertiesDao extends PropertiesImpl implements JaxbPersistenceApi<Properties>, Properties {
-	private static JaxbFactory<Properties> factory;
+public class PropertiesDao extends PropertiesImpl
+    implements JaxbPersistenceApi<Properties>, Properties {
+  private static JaxbFactory<Properties> factory;
 
-	@Id
-	public int getId() {
-		return super.getId();
-	}
+  EntitiesDao entity;
+  
+  @Id
+  public int getId() {
+    return super.getId();
+  }
 
-	@Override
-	public int getEntity_id() {
-		return super.getEntity_id();
-	}
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "entity_id")
+  public EntitiesDao getEntity() {
+    return entity;
+  }
 
-	@Override
-	public String getPkey() {
-		return super.getPkey();
-	}
-	
-	@Override
-	public String getValue() {
-		return super.getValue();
-	}
+  public void setEntity(EntitiesDao entity) {
+    super.setEntity(entity);
+    this.entity = entity;
+  }
 
-	public static JaxbFactoryApi<Properties> getFactoryStatic() {
-		if (factory == null) {
-			factory = new JaxbFactory<Properties>(PropertiesDao.class);
-		}
-		return factory;
-	}
+  @Override
+  public String getPkey() {
+    return super.getPkey();
+  }
 
-	public JaxbFactoryApi<Properties> getFactory() {
-		return getFactoryStatic();
-	}
+  @Override
+  public String getValue() {
+    return super.getValue();
+  }
 
-	public String asJson() throws JAXBException {
-		String json = getFactory().asJson(this);
-		return json;
-	}
+  public static JaxbFactoryApi<Properties> getFactoryStatic() {
+    if (factory == null) {
+      factory = new JaxbFactory<Properties>(PropertiesDao.class);
+    }
+    return factory;
+  }
 
-	public String asXML() throws JAXBException {
-		String xml = getFactory().asXML(this);
-		return xml;
-	}
+  public JaxbFactoryApi<Properties> getFactory() {
+    return getFactoryStatic();
+  }
+
+  public String asJson() throws JAXBException {
+    String json = getFactory().asJson(this);
+    return json;
+  }
+
+  public String asXML() throws JAXBException {
+    String xml = getFactory().asXML(this);
+    return xml;
+  }
 
 }

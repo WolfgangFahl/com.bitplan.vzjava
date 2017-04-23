@@ -70,16 +70,13 @@ public class Channel {
     if (vzdb == null)
       vzdb = new VZDB();
     PropertiesManagerDao pm = new PropertiesManagerDao();
-    List<Properties> allproperties = pm.getProperties(vzdb);
     EntitiesManagerDao em = new EntitiesManagerDao();
     int index=0;
     for (Entities entity : em.getEntities(vzdb)) {
       Channel channel = new Channel();
       channel.entity = entity;
-      for (Properties property : allproperties) {
-        if (property.getEntity_id() == entity.getId()) {
-          channel.properties.put(property.getPkey(), property);
-        }
+      for (Properties property : entity.getProperties()) {
+        channel.properties.put(property.getPkey(), property);
       }
       if ("channel".equals(entity.getEclass())) {
         channel.setNo(++index);

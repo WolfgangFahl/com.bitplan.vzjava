@@ -20,10 +20,16 @@
  */
 package com.bitplan.vzjava.jpa;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.JAXBException;
 
 import com.bitplan.jaxb.JaxbFactory;
@@ -31,6 +37,7 @@ import com.bitplan.jaxb.JaxbFactoryApi;
 import com.bitplan.jaxb.JaxbPersistenceApi;
 import com.bitplan.vzjava.Entities;
 import com.bitplan.vzjava.EntitiesImpl;
+import com.bitplan.vzjava.Properties;
 
 /**
  * Entities Table
@@ -40,49 +47,74 @@ import com.bitplan.vzjava.EntitiesImpl;
  */
 @Entity(name = "Entities")
 @Table(name = "Entities")
-public class EntitiesDao extends EntitiesImpl implements JaxbPersistenceApi<Entities>, Entities {
-	private static JaxbFactory<Entities> factory;
+public class EntitiesDao extends EntitiesImpl
+    implements JaxbPersistenceApi<Entities>, Entities {
+  private static JaxbFactory<Entities> factory;
+  private List<PropertiesDao> properties;
 
-	@Id
-	public int getId() {
-		return super.getId();
-	}
+  @Id
+  public int getId() {
+    return super.getId();
+  }
 
-	@Override
-	public String getUuid() {
-		return super.getUuid();
-	}
+  @Override
+  public String getUuid() {
+    return super.getUuid();
+  }
 
-	@Override
-	public String getType() {
-		return super.getType();
-	}
-	
-	@Override
-	@Column(name = "class")
-	public String getEclass() {
-		return super.getEclass();
-	}
+  @Override
+  public String getType() {
+    return super.getType();
+  }
 
-	public static JaxbFactoryApi<Entities> getFactoryStatic() {
-		if (factory == null) {
-			factory = new JaxbFactory<Entities>(EntitiesDao.class);
-		}
-		return factory;
-	}
+  @Override
+  @Column(name = "class")
+  public String getEclass() {
+    return super.getEclass();
+  }
 
-	public JaxbFactoryApi<Entities> getFactory() {
-		return getFactoryStatic();
-	}
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "entity")
+  public List<PropertiesDao> getPropertiesDao() {
+    return this.properties;
+  }
+  
+  public void setPropertiesDao(List<PropertiesDao> properties) {
+    this.properties=properties;
+  }
 
-	public String asJson() throws JAXBException {
-		String json = getFactory().asJson(this);
-		return json;
-	}
+  @Override
+  @Transient
+  public List<Properties> getProperties() {
+    List<Properties> result = new ArrayList<Properties>();
+    for (PropertiesDao property : this.getPropertiesDao()) {
+      result.add(property);
+    }
+    return result;
+  }
 
-	public String asXML() throws JAXBException {
-		String xml = getFactory().asXML(this);
-		return xml;
-	}
+  public void setProperties(List<PropertiesDao> properties) {
+    this.properties = properties;
+  }
+
+  public static JaxbFactoryApi<Entities> getFactoryStatic() {
+    if (factory == null) {
+      factory = new JaxbFactory<Entities>(EntitiesDao.class);
+    }
+    return factory;
+  }
+
+  public JaxbFactoryApi<Entities> getFactory() {
+    return getFactoryStatic();
+  }
+
+  public String asJson() throws JAXBException {
+    String json = getFactory().asJson(this);
+    return json;
+  }
+
+  public String asXML() throws JAXBException {
+    String xml = getFactory().asXML(this);
+    return xml;
+  }
 
 }

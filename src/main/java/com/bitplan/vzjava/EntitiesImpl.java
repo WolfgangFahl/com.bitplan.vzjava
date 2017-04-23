@@ -20,6 +20,8 @@
  */
 package com.bitplan.vzjava;
 
+import java.util.List;
+
 /**
  * implementation of Entities
  * 
@@ -31,6 +33,7 @@ public class EntitiesImpl implements Entities {
   String uuid;
   String type;
   String eclass;
+  private List<Properties> properties;
 
   public int getId() {
     return id;
@@ -62,6 +65,11 @@ public class EntitiesImpl implements Entities {
 
   public void setEclass(String eclass) {
     this.eclass = eclass;
+  }
+
+  @Override
+  public List<Properties> getProperties() {
+    return properties;
   }
 
 }

@@ -20,6 +20,8 @@
  */
 package com.bitplan.vzjava;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 /**
  * implementation of Properties
  * @author wf
@@ -27,7 +29,7 @@ package com.bitplan.vzjava;
  */
 public class PropertiesImpl {
 	int id;
-	int entity_id;
+	Entities entity;
 	String pkey;
 	String value;
 
@@ -49,25 +51,15 @@ public class PropertiesImpl {
 		this.id = id;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#getEntity_id()
-	 */
-	public int getEntity_id() {
-		return entity_id;
-	}
+	public Entities getEntity() {
+    return entity;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.bitplan.vzjava.jpa.Properties#setEntity_id(int)
-	 */
-	public void setEntity_id(int entity_id) {
-		this.entity_id = entity_id;
-	}
+  public void setEntity(Entities entity) {
+    this.entity = entity;
+  }
 
-	/*
+  /*
 	 * (non-Javadoc)
 	 * 
 	 * @see com.bitplan.vzjava.jpa.Properties#getPkey()
