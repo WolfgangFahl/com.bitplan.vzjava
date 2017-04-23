@@ -21,7 +21,9 @@
 package com.bitplan.vzjava.jpa;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Query;
 import javax.xml.bind.annotation.XmlElement;
@@ -36,61 +38,92 @@ import com.bitplan.vzjava.EntitiesManager;
 
 /**
  * manager for Entities
+ * 
  * @author wf
  *
  */
-@XmlRootElement(name="entitiesManager")
-public class EntitiesManagerDao extends ManagerImpl<EntitiesManager,Entities> implements com.bitplan.vzjava.EntitiesManager{
+@XmlRootElement(name = "entitiesManager")
+public class EntitiesManagerDao extends ManagerImpl<EntitiesManager, Entities>
+    implements com.bitplan.vzjava.EntitiesManager {
 
-	private static JaxbFactory<EntitiesManager> factory;
-	List<Entities> entities=new ArrayList<Entities>();
-	@XmlElementWrapper(name = "entities")
-	@XmlElement(name = "entity")
-	public List<Entities> getEntities() {
-		return entities;
-	}
+  private static JaxbFactory<EntitiesManager> factory;
+  private static EntitiesManagerDao instance;
+  Map<String, Entities> entitiesByUuid = new HashMap<String, Entities>();
+  Map<Integer, Entities> entitiesByChannel = new HashMap<Integer, Entities>();
+  List<Entities> entities = new ArrayList<Entities>();
 
-	public void setEntities(List<Entities> entities) {
-		this.entities = entities;
-	}
+  @XmlElementWrapper(name = "entities")
+  @XmlElement(name = "entity")
+  public List<Entities> getEntities() {
+    return entities;
+  }
 
-	public List<Entities> getElements() {
-		return getEntities();
-	}
+  public void setEntities(List<Entities> entities) {
+    this.entities = entities;
+  }
 
-	public static JaxbFactoryApi<EntitiesManager> getFactoryStatic() {
-		if (factory==null) {
-			factory=new JaxbFactory<EntitiesManager>(EntitiesManagerDao.class);
-		}
-		return factory;
-	}
-	public JaxbFactoryApi<EntitiesManager> getFactory() {
-		return getFactoryStatic();
-	}
+  public List<Entities> getElements() {
+    return getEntities();
+  }
 
-	/**
-	 * get the Entities from the Volkszähler database
-	 * @param vz
-	 * @return the entities
-	 */
-	public List<Entities> getEntities(VZDB vz) {
-		entities.clear();
-		Query query = vz.getEntityManager().createQuery("select p from Entities p");
-		@SuppressWarnings("unchecked")
-		List<EntitiesDao> props = query.getResultList();
-		for (Entities prop:props) {
-			add(prop);
-		}
-		return getEntities();
-	}
+  public static JaxbFactoryApi<EntitiesManager> getFactoryStatic() {
+    if (factory == null) {
+      factory = new JaxbFactory<EntitiesManager>(EntitiesManagerDao.class);
+    }
+    return factory;
+  }
 
-	/**
-	 * add a entity to the entities
-	 * @param entity
-	 */
-	public void add(Entities entity) {
-		entities.add(entity);
-	}
+  public JaxbFactoryApi<EntitiesManager> getFactory() {
+    return getFactoryStatic();
+  }
 
-	
+  /**
+   * get the Entities from the Volkszähler database
+   * 
+   * @param vz
+   * @return the entities
+   */
+  public List<Entities> getEntities(VZDB vz) {
+    entities.clear();
+    Query query = vz.getEntityManager().createQuery("select p from Entities p");
+    @SuppressWarnings("unchecked")
+    List<EntitiesDao> props = query.getResultList();
+    for (Entities prop : props) {
+      add(prop);
+    }
+    return getEntities();
+  }
+
+  /**
+   * add a entity to the entities
+   * 
+   * @param entity
+   */
+  public void add(Entities entity) {
+    entities.add(entity);
+    this.entitiesByUuid.put(entity.getUuid(), entity);
+    this.entitiesByChannel.put(entity.getId(), entity);
+  }
+
+  @Override
+  public Entities getEntityByUuid(String uuid) {
+    return this.entitiesByUuid.get(uuid);
+  }
+
+  @Override
+  public Entities getEntityByChannel(int channelId) {
+    return this.entitiesByChannel.get(channelId);
+  }
+  
+  /**
+   * get the instance
+   * @return
+   */
+  public static EntitiesManagerDao getInstance() {
+    if (instance==null) {
+      instance=new EntitiesManagerDao();
+    }
+    return instance;
+  }
+
 }

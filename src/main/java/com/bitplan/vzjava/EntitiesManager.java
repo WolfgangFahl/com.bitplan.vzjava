@@ -28,5 +28,6 @@ import com.bitplan.persistence.Manager;
  *
  */
 public interface EntitiesManager extends Manager<EntitiesManager,Entities>{
-
+  public Entities getEntityByUuid(String uuid);
+  public Entities getEntityByChannel(int channelId);
 }

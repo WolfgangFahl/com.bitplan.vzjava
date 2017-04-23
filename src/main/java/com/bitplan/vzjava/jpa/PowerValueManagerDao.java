@@ -37,6 +37,7 @@ import com.bitplan.datatypes.TypeConverter;
 import com.bitplan.jaxb.JaxbFactory;
 import com.bitplan.jaxb.JaxbFactoryApi;
 import com.bitplan.jaxb.ManagerImpl;
+import com.bitplan.vzjava.Entities;
 import com.bitplan.vzjava.PowerValue;
 import com.bitplan.vzjava.PowerValueImpl;
 import com.bitplan.vzjava.PowerValueManager;
@@ -195,19 +196,36 @@ public class PowerValueManagerDao extends
     }
     return chargeValues;
   }
-  
+
   /**
    * get the current PowerValue for the given channel
+   * 
    * @param channel
    * @return the PowerValue
    */
   public PowerValue getCurrent(int channel) {
+    EntitiesManagerDao emd = EntitiesManagerDao.getInstance();
+    emd.getEntities(vzdb);
+    Entities entity = emd.getEntityByChannel(channel);
+    if (entity==null)
+      throw new RuntimeException("entity is null for channel "+channel);
     @SuppressWarnings("unchecked")
     TypedQuery<PowerValueDao> query = (TypedQuery<PowerValueDao>) vzdb
         .getEntityManager().createNamedQuery("Data.current");
     query.setParameter(1, channel);
-    query.setMaxResults(1);
-    PowerValueDao powerValue = query.getSingleResult();
+    PowerValue powerValue = null;
+    if ("powersensor".equals(entity.getType())) {
+      query.setMaxResults(1);
+      powerValue = query.getSingleResult();
+    } else {
+      query.setMaxResults(2);
+      List<PowerValueDao> currentPowerValues = query.getResultList();
+      PowerValueDao currentValue = currentPowerValues.get(0);
+      PowerValueDao prevValue = currentPowerValues.get(1);
+      powerValue=new PowerValueImpl();
+      powerValue.setTimeStamp(currentValue.getTimeStamp());
+      powerValue.setValue(getPower(currentValue,prevValue));
+    }
     return powerValue;
   }
 
@@ -261,6 +279,7 @@ public class PowerValueManagerDao extends
 
   /**
    * get an instance based on the given VZDB
+   * 
    * @param pvzdb
    * @return - a PowerValueManagerDao
    * @throws Exception
