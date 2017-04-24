@@ -26,6 +26,7 @@ import java.io.File;
 
 import org.junit.Test;
 
+import com.bitplan.vzjava.AppMode.Mode;
 import com.bitplan.vzjava.jpa.VZDB;
 
 import ar.com.hjg.pngj.PngReader;
@@ -43,6 +44,7 @@ public class TestVZPlot {
    */
   @Test
   public void testDemoPlot() throws Exception {
+    AppMode.setMode(Mode.Test);
     PowerValuePlotManager pvpm = PowerValuePlotManager.getInstance();
     pvpm.setVzdb(new VZDB("demo"));
     // 2017-02-04 18:05/2017-02-05 04:00?width=640&height=480

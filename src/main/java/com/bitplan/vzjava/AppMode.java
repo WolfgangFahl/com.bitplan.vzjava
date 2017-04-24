@@ -1,3 +1,23 @@
+/**
+ * Copyright (c) 2017 BITPlan GmbH
+ *
+ * http://www.bitplan.com
+ *
+ * This file is part of the Opensource project at:
+ * https://github.com/WolfgangFahl/com.bitplan.vzjava
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.bitplan.vzjava;
 
 import java.io.File;
@@ -12,11 +32,18 @@ import org.apache.commons.io.FileUtils;
  *
  */
 public class AppMode {
+  /**
+   * Welcome= first start
+   * Demo = use demo database for next start of application
+   * Test = use demo database once
+   * Operation = use configured database
+   */
   public static enum Mode {
-    Welcome, Demo, Operation
+    Welcome, Demo, Test, Operation
   };
 
-  static File demoDb = new File("src/test/data/vzdb/vztest.db");
+  static File demoDb = new File("src/test/data/vzdb/vzdemo.db");
+  static File testDb = new File("src/test/data/vzdb/vztest.db");
   static File demoDbRelease = new File("src/test/data/vzdb/vztest.db.release");
 
   /**
@@ -27,6 +54,8 @@ public class AppMode {
   public static Mode getMode() {
     if (!demoDb.exists()) {
       return Mode.Welcome;
+    } else if (testDb.exists()) {
+      return Mode.Test;
     } else {
       if ("demo".equals(DBConfigImpl.getConfigName())) {
         return Mode.Demo;
@@ -40,16 +69,27 @@ public class AppMode {
    * 
    * @param mode
    *          - the mode to set
-   * @throws Exception 
    */
-  public static void setMode(Mode mode) throws Exception {
-    switch (mode) {
-    case Welcome:
-      demoDb.delete();
-      break;
-    case Demo:
-      FileUtils.copyFile(demoDbRelease, demoDb);
-      break;
+  public static void setMode(Mode mode) {
+    try {
+      switch (mode) {
+      case Welcome:
+        demoDb.delete();
+        break;
+      case Demo:
+        testDb.delete();
+        FileUtils.copyFile(demoDbRelease, demoDb);
+        break;
+      case Test:
+        demoDb.delete();
+        FileUtils.copyFile(demoDbRelease, testDb);
+      case Operation:
+        break;
+      default:
+        break;
+      }
+    } catch (IOException e) {
+       ErrorHandler.handle(e);
     }
   }
 }

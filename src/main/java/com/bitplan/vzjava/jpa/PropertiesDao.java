@@ -27,12 +27,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.XmlTransient;
 
 import com.bitplan.jaxb.JaxbFactory;
 import com.bitplan.jaxb.JaxbFactoryApi;
 import com.bitplan.jaxb.JaxbPersistenceApi;
-import com.bitplan.vzjava.Entities;
 import com.bitplan.vzjava.Properties;
 import com.bitplan.vzjava.PropertiesImpl;
 
@@ -55,7 +53,7 @@ public class PropertiesDao extends PropertiesImpl
     return super.getId();
   }
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "entity_id")
   public EntitiesDao getEntity() {
     return entity;

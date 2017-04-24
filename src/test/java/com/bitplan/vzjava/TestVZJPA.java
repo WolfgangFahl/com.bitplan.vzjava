@@ -34,6 +34,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.bitplan.vzjava.AppMode.Mode;
@@ -56,6 +57,11 @@ public class TestVZJPA {
   private static List<Properties> props;
   boolean debug = false;
   static VZDB vzdb;
+  
+  @BeforeClass
+  public static void setTestMode() {
+    AppMode.setMode(Mode.Test);
+  }
 
   /**
    * get the demo VZDB
@@ -64,7 +70,6 @@ public class TestVZJPA {
    */
   public static VZDB getDemoVZ() throws Exception {
     if (vzdb == null) {
-      AppMode.setMode(Mode.Demo);
       vzdb = new VZDB("demo");
     }
     return vzdb;
