@@ -1,41 +1,27 @@
 <!-- Copyright (c) 2017 Wolfgang Fahl / BITPlan GmbH Project details and 
 	license at: https://github.com/WolfgangFahl/com.bitplan.vzjava -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.bitplan.pom</groupId>
+		<artifactId>com.bitplan.pom</artifactId>
+		<version>0.0.6</version>
+		<relativePath>../com.bitplan.pom/pom.xml</relativePath>
+	</parent>
 	<groupId>com.bitplan.vzjava</groupId>
 	<artifactId>com.bitplan.vzjava</artifactId>
 	<version>0.0.1</version>
 	<name>vzjava</name>
 	<description>Java Frontend für Volkszähler</description>
-	<url>https://github.com/WolfgangFahl/com.bitplan.vzjava</url>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<!-- for parent pom to work -->
+		<github.project>com.bitplan.vzjava</github.project>
+		<github.owner>WolfgangFahl</github.owner>
+		<!-- for readme generation -->
+		<documentation.wiki>http://www.bitplan.com/Vzjava</documentation.wiki>
 	</properties>
-	<licenses>
-		<license>
-			<name>Apache 2.0 license</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-		</license>
-	</licenses>
-	<scm>
-		<connection>scm:git:git://github.com/WolfgangFahl/com.bitplan.vzjava.git</connection>
-		<developerConnection>scm:git:git@github.com:WolfgangFahl/com.bitplan.vzjava.git</developerConnection>
-		<url>https://github.com/WolfgangFahl/com.bitplan.vzjava</url>
-	</scm>
-	<issueManagement>
-		<url>https://github.com/WolfgangFahl/com.bitplan.vzjava/issues</url>
-		<system>GitHub</system>
-	</issueManagement>
-	<developers>
-		<developer>
-			<id>wf</id>
-			<name>Wolfgang Fahl</name>
-			<organization>BITPlan GmbH</organization>
-			<organizationUrl>http://www.bitplan.com</organizationUrl>
-		</developer>
-	</developers>
 	<dependencies>
 		<!-- simplerest -api -->
 		<dependency>
@@ -90,47 +76,12 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
-			<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.19.1</version>
-				<configuration>
-					<includes>
-						<include>**/*Test*.java</include>
-					</includes>
-					<excludes>
-						<exclude>**/*TestSuite.java</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<!-- http://code.mycila.com/license-maven-plugin/ -->
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<version>1.9.0</version>
-				<configuration>
-					<header>src/etc/header.txt</header>
-					<includes>
-						<include>src/**/*.java</include>
-					</includes>
-				</configuration>
-			</plugin>
 			<!-- executable jar with dependencies see http://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven 
 				run with mvn clean compile assembly:single -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.6</version>
+				<version>${maven-assembly-plugin.version}</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -141,12 +92,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ssh</artifactId>
-				<version>2.10</version>
-			</extension>
-		</extensions>
 	</build>
 </project>
