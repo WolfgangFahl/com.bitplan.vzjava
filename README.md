@@ -39,6 +39,8 @@ mvn package assembly:single
 java -jar target/com.bitplan.vzjava-0.0.1-jar-with-dependencies-and-services.jar 
 ```
 #### Screenshot
-[demoplot](https://cloud.githubusercontent.com/assets/1336221/24326357/c7520d78-11ac-11e7-82da-ab2ff581d48f.png)### Version history
+[demoplot](https://cloud.githubusercontent.com/assets/1336221/24326357/c7520d78-11ac-11e7-82da-ab2ff581d48f.png)
+
+### Version history
 0.0.0: 2017-03-23 - Projektrahmen mit Tests - noch keine "nützliche" Funktion
 0.0.1: 2017-03-31 - Hilfeseite mit Links, Demo-Datenbank, Datenbank-Einstellungs-Dialog, Simpler Demo-Plot über REST
