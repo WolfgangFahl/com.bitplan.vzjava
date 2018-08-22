@@ -10,6 +10,9 @@
 
 ### Documentation
 * [Wiki](http://www.bitplan.com/Vzjava)
+* [com.bitplan.vzjava Project pages](https://WolfgangFahl.github.io/com.bitplan.vzjava)
+* [Javadoc](https://WolfgangFahl.github.io/com.bitplan.vzjava/apidocs/index.html)
+* [Test-Report](https://WolfgangFahl.github.io/com.bitplan.vzjava/surefire-report.html)
 ### Maven dependency
 
 Maven dependency
