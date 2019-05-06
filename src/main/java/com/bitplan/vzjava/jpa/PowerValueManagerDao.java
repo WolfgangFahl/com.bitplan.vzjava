@@ -51,7 +51,7 @@ import com.bitplan.vzjava.PowerValueManager;
 @XmlRootElement(name = "powerValuesManager")
 public class PowerValueManagerDao extends
     ManagerImpl<PowerValueManager, PowerValue> implements PowerValueManager {
-  private static final double POWER_LIMIT = 15000; // powervalues over this
+  private static final double POWER_LIMIT =32000; // powervalues over this
   // value are artefacts
 
   static SimpleDateFormat isoDateFormatter = new SimpleDateFormat(
@@ -245,7 +245,7 @@ public class PowerValueManagerDao extends
     for (PowerValue chargeValue : powerValues) {
       if (prevValue != null) {
         double power = getPower(chargeValue, prevValue);
-        if (power < POWER_LIMIT) {
+        if (Math.abs(power) < POWER_LIMIT) {
           PowerValue cv = new PowerValueImpl();
           cv.setTimeStamp(chargeValue.getTimeStamp());
           cv.setValue(power);

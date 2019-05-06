@@ -1,4 +1,4 @@
-<!-- Copyright (c) 2017 Wolfgang Fahl / BITPlan GmbH Project details and 
+bit<!-- Copyright (c) 2017 Wolfgang Fahl / BITPlan GmbH Project details and
 	license at: https://github.com/WolfgangFahl/com.bitplan.vzjava -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,12 +7,12 @@
 	<parent>
 		<groupId>com.bitplan.pom</groupId>
 		<artifactId>com.bitplan.pom</artifactId>
-		<version>0.0.8</version>
+		<version>0.0.30</version>
 		<relativePath>../com.bitplan.pom/pom.xml</relativePath>
 	</parent>
 	<groupId>com.bitplan.vzjava</groupId>
 	<artifactId>com.bitplan.vzjava</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<name>vzjava</name>
 	<description>Java Frontend für Volkszähler</description>
 	<properties>
@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>com.bitplan.rest</groupId>
 			<artifactId>com.bitplan.simplerest</artifactId>
-			<version>0.0.13</version>			
+			<version>0.0.13</version>
 		</dependency>
 		<dependency>
 			<groupId>com.bitplan.rest</groupId>
@@ -67,7 +67,7 @@
 			<artifactId>pngj</artifactId>
 			<version>2.1.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3 
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-math3
 			for linear regressions -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -77,7 +77,7 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<!-- executable jar with dependencies see http://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven 
+			<!-- executable jar with dependencies see http://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven
 				run with mvn clean compile assembly:single -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
