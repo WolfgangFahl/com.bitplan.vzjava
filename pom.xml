@@ -23,6 +23,11 @@
 		<documentation.wiki>http://www.bitplan.com/Vzjava</documentation.wiki>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<!-- simplerest -api -->
 		<dependency>
 			<groupId>com.bitplan.rest</groupId>
