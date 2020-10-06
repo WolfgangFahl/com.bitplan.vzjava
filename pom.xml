@@ -7,12 +7,12 @@
 	<parent>
 		<groupId>com.bitplan.pom</groupId>
 		<artifactId>com.bitplan.pom</artifactId>
-		<version>0.0.30</version>
+		<version>0.0.34</version>
 		<relativePath>../com.bitplan.pom/pom.xml</relativePath>
 	</parent>
 	<groupId>com.bitplan.vzjava</groupId>
 	<artifactId>com.bitplan.vzjava</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>vzjava</name>
 	<description>Java Frontend für Volkszähler</description>
 	<properties>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>6.0.5</version>
+			<version>8.0.21</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
